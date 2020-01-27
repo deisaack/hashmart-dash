@@ -15,8 +15,7 @@ import s from './Login.module.scss';
 import Widget from '../../components/Widget';
 import Footer from "../../components/Footer";
 import { loginUser } from '../../actions/user';
-import jwt from 'jsonwebtoken';
-import config from '../../config'
+import {Services} from "../../Services";
 
 class Login extends React.Component {
   static propTypes = {
@@ -36,20 +35,26 @@ class Login extends React.Component {
 
   static isAuthenticated(token) {
     // We check if app runs with backend mode
-    if (!config.isBackend && token) return true;
-    if (!token) return;
-    const date = new Date().getTime() / 1000;
-    const data = jwt.decode(token);
-    return date < data.exp;
+    // if (!config.isBackend && token) return true;
+    // if (!token) return;
+    // const date = new Date().getTime() / 1000;
+    // const data = jwt.decode(token);
+    // return date < data.exp;
+    let from = new Date(localStorage.getItem("created"));
+    let expiry = from.setMinutes(from.getMinutes() + 10);
+    let now = new Date();
+    return false;
+    return expiry > now
 }
 
   constructor(props) {
     super(props);
 
     this.state = {
-      login: 'user',
-      password: 'password',
+      login: 'superadmin@hashmart.co.ke',
+      password: 'Testing#2019',
     };
+    this.services = new Services(this);
   }
 
   changeLogin = (event) => {
@@ -63,12 +68,13 @@ class Login extends React.Component {
   doLogin = (e) => {
     this.props.dispatch(
       loginUser({
-        login: this.state.login,
+        email: this.state.login,
         password: this.state.password,
+        that: this
       }),
     );
     e.preventDefault();
-  }
+  };
 
   render() {
     const {from} = this.props.location.state || {
@@ -139,6 +145,7 @@ class Login extends React.Component {
         );
     }
 }
+
 
 function mapStateToProps(state) {
     return {

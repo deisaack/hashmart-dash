@@ -10,7 +10,7 @@ import App from './components/App';
 import config from './config';
 import reducers from './reducers';
 
-axios.defaults.baseURL = config.baseURLApi;
+axios.defaults.baseURL = config.baseUrl;
 axios.defaults.headers.common['Content-Type'] = "application/json";
 const token = localStorage.getItem('token');
 if (token) {

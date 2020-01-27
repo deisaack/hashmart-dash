@@ -1,4 +1,6 @@
 import appConfig from '../config';
+import {Redirect} from "react-router-dom";
+import React from "react";
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -21,7 +23,7 @@ export function receiveLogin(user) {
     type: LOGIN_SUCCESS,
     isFetching: false,
     isAuthenticated: true,
-    id_token: user.id_token,
+    id_token: user.token,
   };
 }
 
@@ -54,13 +56,44 @@ export function receiveLogout() {
 export function logoutUser() {
   return dispatch => {
     dispatch(requestLogout());
-    localStorage.removeItem('id_token');
+    // localStorage.removeItem('id_token');
+    // localStorage.removeItem('created');
+    // localStorage.removeItem('token');
     document.cookie = 'id_token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     dispatch(receiveLogout());
   };
 }
 
 export function loginUser(creds) {
+  return dispatch => {
+    // We dispatch requestLogin to kickoff the call to the API
+    dispatch(requestLogin(creds));
+    let data ={
+      "email": creds.email,
+      "password": creds.password
+    };
+    console.log("CREDS", creds, data);
+    creds.that.services.login(data).then(resp=> {
+      creds.that.setState({
+        isLoading: false,
+      });
+      localStorage.setItem("id_token", resp.data.token);
+      localStorage.setItem("token", resp.data.token);
+      localStorage.setItem("name", resp.data.name);
+      localStorage.setItem("email", resp.data.email);
+      localStorage.setItem("created", new Date().toString());
+        dispatch(receiveLogin(resp));
+        return <Redirect to={"/app"} />;
+        // return Promise.resolve(resp);
+    }).catch(err => {
+      console.error('Error: ', err);
+      dispatch(loginError(""));
+      return Promise.reject(err);
+    });
+  }
+}
+
+export function loginUsers(creds) {
   const config = {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

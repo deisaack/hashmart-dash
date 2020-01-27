@@ -1,12 +1,3 @@
-/**
- * Flatlogic Dashboards (https://flatlogic.com/admin-dashboards)
- *
- * Copyright © 2015-present Flatlogic, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 import React from 'react';
 import cx from 'classnames';
 import { Switch, Route, withRouter } from 'react-router';
@@ -29,6 +20,13 @@ import Notifications from '../../pages/notifications'
 import Posts from '../../pages/posts'
 import Profile from '../../pages/profile'
 import Privacy from '../../pages/privacy'
+import OldDashboard from "../../pages/dashboard/OldDashboard";
+import BusinessList from "../../pages/business/BusinessList";
+import BusinessDetail from "../../pages/business/BusinessDetail";
+import ProductCategory from "../../pages/products/ProductCategory";
+import CreateProductCategory from "../../pages/products/CreateProductCategory";
+import ProductCategoryView from "../../pages/products/ProductCategoryView";
+import CategoryDetail from "../../pages/products/CategoryDetail";
 
 class Layout extends React.Component {
   constructor(props) {
@@ -55,7 +53,14 @@ class Layout extends React.Component {
           />
           <main className={s.content}>
             <Switch>
+              <Route path="/app/admin" exact component={OldDashboard} />
               <Route path="/app/main" exact component={Dashboard} />
+              <Route path="/app/product-category" exact component={ProductCategory} />
+              <Route path="/app/product-category/create" exact component={CreateProductCategory} />
+              <Route path="/app/product-category/view/:id" exact component={ProductCategoryView} />
+              <Route path="/app/category/view/:id" exact component={CategoryDetail} />
+              <Route path="/app/business" exact component={BusinessList} />
+              <Route path="/app/business/:id" exact component={BusinessDetail} />
               <Route path="/app/typography" exact component={Typography} />
               <Route path="/app/tables" exact component={Tables} />
               <Route path="/app/posts" component={Posts} />

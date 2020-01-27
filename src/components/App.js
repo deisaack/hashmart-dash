@@ -14,8 +14,11 @@ import Register from '../pages/register';
 import { logoutUser } from '../actions/user';
 
 const PrivateRoute = ({dispatch, component, ...rest }) => {
-    if (!Login.isAuthenticated(localStorage.getItem('id_token'))) {
-        dispatch(logoutUser());
+    let from = new Date(localStorage.getItem("created"));
+    let expiry = from.setMinutes(from.getMinutes() + 10);
+    let now = new Date();
+    if (now < expiry) {
+    //     dispatch(logoutUser());
         return (<Redirect to="/login"/>)
     } else {
         return ( // eslint-disable-line
@@ -23,6 +26,17 @@ const PrivateRoute = ({dispatch, component, ...rest }) => {
         );
     }
 };
+
+// const PrivateRoute = ({dispatch, component, ...rest }) => {
+//     if (!Login.isAuthenticated(localStorage.getItem('token'))) {
+//         dispatch(logoutUser());
+//         return (<Redirect to="/login"/>)
+//     } else {
+//         return ( // eslint-disable-line
+//             <Route {...rest} render={props => (React.createElement(component, props))}/>
+//         );
+//     }
+// };
 
 const CloseButton = ({closeToast}) => <i onClick={closeToast} className="la la-close notifications-close"/>
 
@@ -37,11 +51,11 @@ class App extends React.PureComponent {
             />
             <HashRouter>
                 <Switch>
-                    <Route path="/" exact render={() => <Redirect to="/app/main"/>}/>
-                    <Route path="/app" exact render={() => <Redirect to="/app/main"/>}/>
+                    {/*<Route path="/" exact render={() => <Redirect to="/app/main"/>}/>*/}
+                    {/*<Route path="/app" exact render={() => <Redirect to="/app/main"/>}/>*/}
                     <PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>
-                    <Route path="/documentation" exact
-                           render={() => <Redirect to="/documentation/getting-started/overview"/>}/>
+                    {/*<Route path="/documentation" exact*/}
+                    {/*       render={() => <Redirect to="/documentation/getting-started/overview"/>}/>*/}
                     {/* <Route path="/documentation" component={DocumentationLayoutComponent}/> */}
                     <Route path="/register" exact component={Register}/>
                     <Route path="/login" exact component={Login}/>

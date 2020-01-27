@@ -1,12 +1,3 @@
-/**
- * Flatlogic Dashboards (https://flatlogic.com/admin-dashboards)
- *
- * Copyright © 2015-present Flatlogic, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 import { connect } from 'react-redux';
 import cx from 'classnames';
 import React from 'react';
@@ -48,7 +39,7 @@ class Header extends React.Component {
     this.setState(prevState => ({
       isOpen: !prevState.isOpen,
     }));
-  }
+  };
 
   doLogout = () => {
     this.props.dispatch(logoutUser());
@@ -96,7 +87,7 @@ class Header extends React.Component {
           <Dropdown isOpen={isOpen} toggle={this.toggleDropdown}>
             <DropdownToggle nav>
               <img className={cx('rounded-circle mr-sm', s.adminPhoto)} src={photo} alt="administrator" />
-              <span className="text-body">Administrator</span>
+              <span className="text-body">{localStorage.getItem("name")}</span>
               <i className={cx('fa fa-angle-down ml-sm', s.arrow, {[s.arrowActive]: isOpen})} />
             </DropdownToggle>
             <DropdownMenu style={{width: '100%'}}>

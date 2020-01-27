@@ -20,11 +20,21 @@ const Sidebar = () => (
         headerLink="/app/main"
         glyph="dashboard"
       />
-      <LinksGroup
-        header="Typography"
-        headerLink="/app/typography"
-        glyph="typography"
-      />
+        <LinksGroup
+            header="Business"
+            headerLink="/app/business"
+            glyph="typography"
+        />
+        <LinksGroup
+            header="Product Categories"
+            headerLink="/app/product-category"
+            glyph="typography"
+        />
+        <LinksGroup
+            header="Typography"
+            headerLink="/app/typography"
+            glyph="typography"
+        />
       <LinksGroup
         header="Tables Basic"
         headerLink="/app/tables"
