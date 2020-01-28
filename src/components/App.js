@@ -11,7 +11,6 @@ import LayoutComponent from '../components/Layout';
 //import DocumentationLayoutComponent from '../documentation/DocumentationLayout';
 import Login from '../pages/login';
 import Register from '../pages/register';
-import { logoutUser } from '../actions/user';
 
 const PrivateRoute = ({dispatch, component, ...rest }) => {
     let from = new Date(localStorage.getItem("created"));
@@ -68,8 +67,4 @@ class App extends React.PureComponent {
   }
 }
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
-});
-
-export default connect(mapStateToProps)(App);
+export default App;

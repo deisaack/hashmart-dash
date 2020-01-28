@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { 
   Alert, 
   Button, 
@@ -14,8 +12,8 @@ import {
 import s from './Login.module.scss';
 import Widget from '../../components/Widget';
 import Footer from "../../components/Footer";
-import { loginUser } from '../../actions/user';
 import {Services} from "../../Services";
+import {Redirect} from "react-router";
 
 class Login extends React.Component {
   static propTypes = {
@@ -67,7 +65,7 @@ class Login extends React.Component {
 
   doLogin = (e) => {
     this.props.dispatch(
-      loginUser({
+      this.funcs.location({
         email: this.state.login,
         password: this.state.password,
         that: this
@@ -147,13 +145,5 @@ class Login extends React.Component {
 }
 
 
-function mapStateToProps(state) {
-    return {
-        isFetching: state.auth.isFetching,
-        isAuthenticated: state.auth.isAuthenticated,
-        errorMessage: state.auth.errorMessage,
-    };
-}
-
-export default withRouter(connect(mapStateToProps)(Login));
+export default Login;
 

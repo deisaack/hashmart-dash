@@ -20,13 +20,20 @@ import { NavLink } from 'react-router-dom';
 import Icon from '../Icon';
 
 import photo from '../../images/photo.jpg';
-import { logoutUser } from '../../actions/user';
 import s from './Header.module.scss';
+import {Functions} from "../../Functions";
+import {Services} from "../../Services";
 
 class Header extends React.Component {
+
+  constructor(props) {
+    super();
+    this.services = new Services(this);
+    this.funcs = new Functions(this);
+  }
   static propTypes = {
     sidebarToggle: PropTypes.func,
-    dispatch: PropTypes.func.isRequired,
+    dispatch: PropTypes.func ,
   };
 
   static defaultProps = {
@@ -42,8 +49,8 @@ class Header extends React.Component {
   };
 
   doLogout = () => {
-    this.props.dispatch(logoutUser());
-  }
+    this.funcs.logoutUser();
+  };
 
   render() {
     const {isOpen} = this.state;
@@ -108,9 +115,4 @@ class Header extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    init: state.runtime.initialNow,
-  };
-}
-export default connect(mapStateToProps)(Header);
+export default Header;

@@ -31,57 +31,12 @@ const Sidebar = () => (
             glyph="typography"
         />
         <LinksGroup
-            header="Typography"
-            headerLink="/app/typography"
-            glyph="typography"
-        />
-        <LinksGroup
             header="Products"
             headerLink="/app/products"
             glyph="typography"
         />
-      <LinksGroup
-        header="Tables Basic"
-        headerLink="/app/tables"
-        glyph="tables"
-      />
-      <LinksGroup
-        header="Notifications"
-        headerLink="/app/notifications"
-        glyph="notifications"
-      />
-      <LinksGroup
-        header="Components"
-        headerLink="/app/components"
-        childrenLinks={[
-          {
-            name: 'Buttons',
-            link: '/app/components/buttons',
-          },
-          {
-            name: 'Charts',
-            link: '/app/components/charts',
-          },
-          {
-            name: 'Icons',
-            link: '/app/components/icons',
-          },
-          {
-            name: 'Maps',
-            link: '/app/components/maps',
-          },
-        ]}
-        glyph="components"
-      />
     </ul>
   </nav>
 );
 
-function mapStateToProps(store) {
-  return {
-    sidebarOpened: store.navigation.sidebarOpened,
-    sidebarStatic: store.navigation.sidebarStatic,
-  };
-}
-
-export default withRouter(connect(mapStateToProps)(Sidebar));
+export default Sidebar;
