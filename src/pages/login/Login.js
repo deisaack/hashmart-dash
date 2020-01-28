@@ -1,159 +1,142 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withRouter, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { 
-  Alert, 
-  Button, 
-  FormGroup, 
-  Input, 
-  Row,
-  Col,
-  Form
-} from 'reactstrap';
-import s from './Login.module.scss';
-import Widget from '../../components/Widget';
+import React from "react";
+import { Alert, Button, FormGroup, Input, Row, Col, Form } from "reactstrap";
+import s from "./Login.module.scss";
+import Widget from "../../components/Widget";
 import Footer from "../../components/Footer";
-import { loginUser } from '../../actions/user';
-import {Services} from "../../Services";
+import { Services } from "../../Services";
+import axios from "axios";
 
 class Login extends React.Component {
-  static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool,
-    isFetching: PropTypes.bool,
-    location: PropTypes.any, // eslint-disable-line
-    errorMessage: PropTypes.string,
-  };
-
-  static defaultProps = {
-    isAuthenticated: false,
-    isFetching: false,
-    location: {},
-    errorMessage: null,
-  };
-
-  static isAuthenticated(token) {
-    // We check if app runs with backend mode
-    // if (!config.isBackend && token) return true;
-    // if (!token) return;
-    // const date = new Date().getTime() / 1000;
-    // const data = jwt.decode(token);
-    // return date < data.exp;
-    let from = new Date(localStorage.getItem("created"));
-    let expiry = from.setMinutes(from.getMinutes() + 10);
-    let now = new Date();
-    return false;
-    return expiry > now
-}
-
   constructor(props) {
     super(props);
-
     this.state = {
-      login: 'superadmin@hashmart.co.ke',
-      password: 'Testing#2019',
+      email: "superadmin@hashmart.co.ke",
+      password: "Testing#2019",
+      errors: []
     };
     this.services = new Services(this);
   }
 
-  changeLogin = (event) => {
-    this.setState({login: event.target.value});
-  }
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
-  changePassword = (event) => {
-    this.setState({password: event.target.value});
-  }
+  doLogin = event => {
+    event.preventDefault();
 
-  doLogin = (e) => {
-    this.props.dispatch(
-      loginUser({
-        email: this.state.login,
-        password: this.state.password,
-        that: this
-      }),
-    );
-    e.preventDefault();
+    this.setState({ isLoading: true, alert: null });
+    const data = {
+      email: this.state.email.trim(),
+      password: this.state.password.trim()
+    };
+
+    axios
+      .post(`${this.services.BASE_URL}/api/v1/cemascore/login`, data)
+      .then(response => {
+        if (response.status === 200) {
+          this.setState({ changePassword: response.data.updatePassword });
+          localStorage.setItem("authToken", response.data.token);
+          localStorage.setItem("initialTime", Date.now());
+          window.Env.refreshTokenInterval();
+        }
+      })
+      .catch(error => {
+        this.setState({ isLoading: false });
+        console.log("Error :", error.response);
+        let errors = [...this.state.errors];
+
+        if (error.response === undefined) {
+          errors.push("Oops network error, kindly check your connection!");
+        } else {
+          if (error.response.status === 401) {
+            if (error.response.data.isLockedOut === true) {
+              errors.push(
+                "Your Account has been blocked due to many invalid attempts! Kindly contact your administrator for assistance"
+              );
+            } else {
+              errors.push("Incorrect Password!");
+            }
+          } else if (error.response.status === 403) {
+            errors.push(
+              "Your account has been deactivated! Kindly contact the administrator for assistance!"
+            );
+          } else if (error.response.status === 404) {
+            errors.push(error.response.data);
+          } else {
+            errors.push(error.response.data.message);
+          }
+        }
+        this.setState({ errors });
+      });
   };
 
   render() {
-    const {from} = this.props.location.state || {
-      from: {pathname: '/app'},
-    };
-
-    if (this.props.isAuthenticated) {
-      // cant access login page while logged in
-      return <Redirect to={from} />;
-    }
-
-        return (
-          <div className={s.root}>
-          <Row>
-            <Col xs={{size: 10, offset: 1}} sm={{size: 6, offset: 3}} lg={{size:4, offset: 4}}>
-              <p className="text-center">React Dashboard</p>
-              <Widget className={s.widget}>
-                <h4 className="mt-0">Login to your Web App</h4>
-                <p className="fs-sm text-muted">
-                  User your username and password to sign in<br />
-                  Don&#39;t have an account? Sign up now!
-                </p>
-                <Form className="mt" onSubmit={this.doLogin}>
-                  {this.props.errorMessage && (
-                    <Alert size="sm" color="danger">
-                      {this.props.errorMessage}
-                    </Alert>
-                  )}
-                  <FormGroup className="form-group">
-                    <Input
-                      className="no-border"
-                      value={this.state.login}
-                      onChange={this.changeLogin}
-                      type="text"
-                      required
-                      name="username"
-                      placeholder="Username"
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Input
-                      className="no-border"
-                      value={this.state.password}
-                      onChange={this.changePassword}
-                      type="password"
-                      required
-                      name="password"
-                      placeholder="Password"
-                    />
-                  </FormGroup>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <a href="#" className="fs-sm">Trouble with account?</a> {/* eslint-disable-line */}
-                    <div>
-                      <Button color="default" size="sm">
-                        Create an account
-                      </Button>
-                      <Button color="success" size="sm" type="submit">
-                        {this.props.isFetching ? 'Loading...' : 'Login'}
-                      </Button>
-                    </div>
+    return (
+      <div className={s.root}>
+        <Row>
+          <Col
+            xs={{ size: 10, offset: 1 }}
+            sm={{ size: 6, offset: 3 }}
+            lg={{ size: 4, offset: 4 }}
+          >
+            <p className="text-center">React Dashboard</p>
+            <Widget className={s.widget}>
+              <h4 className="mt-0">Login to your Web App</h4>
+              <p className="fs-sm text-muted">
+                User your username and password to sign in
+                <br />
+                Don&#39;t have an account? Sign up now!
+              </p>
+              <Form className="mt" onSubmit={this.doLogin}>
+                {this.props.errorMessage && (
+                  <Alert size="sm" color="danger">
+                    {this.props.errorMessage}
+                  </Alert>
+                )}
+                <FormGroup className="form-group">
+                  <Input
+                    className="no-border"
+                    value={this.state.email}
+                    onChange={this.handleChange}
+                    type="text"
+                    required
+                    name="email"
+                    placeholder="email"
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Input
+                    className="no-border"
+                    value={this.state.password}
+                    onChange={this.handleChange}
+                    type="password"
+                    required
+                    name="password"
+                    placeholder="Password"
+                  />
+                </FormGroup>
+                <div className="d-flex justify-content-between align-items-center">
+                  <a href="#" className="fs-sm">
+                    Trouble with account?
+                  </a>{" "}
+                  {/* eslint-disable-line */}
+                  <div>
+                    <Button color="default" size="sm">
+                      Create an account
+                    </Button>
+                    <Button color="success" size="sm" type="submit">
+                      {this.props.isFetching ? "Loading..." : "Login"}
+                    </Button>
                   </div>
-                </Form>
-              </Widget>
-            </Col>
-          </Row>
-          <Footer className="text-center" />
-          </div>
-        );
-    }
+                </div>
+              </Form>
+            </Widget>
+          </Col>
+        </Row>
+        <Footer className="text-center" />
+      </div>
+    );
+  }
 }
 
-
-function mapStateToProps(state) {
-    return {
-        isFetching: state.auth.isFetching,
-        isAuthenticated: state.auth.isAuthenticated,
-        errorMessage: state.auth.errorMessage,
-    };
-}
-
-export default withRouter(connect(mapStateToProps)(Login));
-
+export default Login;
