@@ -31,7 +31,7 @@ class Login extends React.Component {
     };
 
     axios
-      .post(`${this.services.BASE_URL}/api/v1/cemascore/login`, data)
+      .post(`${this.services.BASE_URL}/api/v1/hashmart/login`, data)
       .then(response => {
         if (response.status === 200) {
           this.setState({ changePassword: response.data.updatePassword });
