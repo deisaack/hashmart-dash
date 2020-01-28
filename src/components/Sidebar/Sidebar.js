@@ -35,6 +35,11 @@ const Sidebar = () => (
             headerLink="/app/typography"
             glyph="typography"
         />
+        <LinksGroup
+            header="Products"
+            headerLink="/app/products"
+            glyph="typography"
+        />
       <LinksGroup
         header="Tables Basic"
         headerLink="/app/tables"

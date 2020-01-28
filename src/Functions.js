@@ -3,15 +3,24 @@ import SweetAlert from 'react-bootstrap-sweetalert';
 import {toast} from "react-toastify";
 
 export class Functions {
+
     constructor(that, ...requiredFields) {
         this.requiredFields = requiredFields;
         this.state = {
             that: that
         };
         this.that = that;
-        // this.that.services.login();
+        this.that.services.login();
         this.that.services.refreshToken();
     }
+
+    showForm = (name) => {
+        if (this.that.state.form === name){
+            this.that.setState({form: ""})
+        } else {
+            this.that.setState({form: name})
+        }
+    };
 
     float = value => {
         try {

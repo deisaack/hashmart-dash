@@ -35,7 +35,12 @@ class ProductCategory extends Component {
     };
 
     showMyBusinesses = () => {
-        this.services.getMyBusinesses();
+    };
+
+    getProductCategory = function() {
+        const { match: { params } } = this.props;
+        this.setState({productCategory: params.productCategory});
+        return params.productCategory
     };
 
     submitForm = () => {

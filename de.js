@@ -1,12 +1,3 @@
-{
-    "companyCode": "string",
-    "subCategoryCode": "string",
-    "brandCode": "string",
-    "productName": "string",
-    "productCode": "string",
-    "description": "string",
-    "availableQuantity": 0,
-    "price": 0,
-    "discount": 0,
-    "actuaLAmount": 0,
-}
+name: "google-site-verification=xNYTU7TGikJHunYv9xo-gNW5eAyZNzGOdVzUOGcq5fI"
+description: "l"
+featureCode: "F00000001"

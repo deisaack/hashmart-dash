@@ -47,6 +47,27 @@ export class Services {
         }).catch(err=>{this.__handleCatch(err);})
     };
 
+    getAllProducts = () => {
+        const url = this.BASE_URL + "/api/v1/hashmart/get-product-admin";
+        return axios.get(url, this.CONFIG).then(resp=> {
+            this.that.setState({productList: resp.data, isLoading: false})
+        }).catch(err=>{this.__handleCatch(err);})
+    };
+
+    getSingleProduct = (productcode) => {
+        const url = this.BASE_URL + `/api/v1/hashmart/get-single-product/${productcode}`;
+        axios.get(url, this.CONFIG).then(resp=> {
+            this.that.setState({product: resp.data.products[0], features: resp.data.products[0].features, isLoading: false})
+        }).catch(err=>{this.__handleCatch(err);})
+    };
+
+    getProductReview = (productcode) => {
+        const url = this.BASE_URL + `/api/v1/hashmart/get-single-product/${productcode}`;
+        axios.get(url, this.CONFIG).then(resp=> {
+            this.that.setState({product: resp.data.products[0], features: resp.data.products[0].features, isLoading: false})
+        }).catch(err=>{this.__handleCatch(err);})
+    };
+
     getAllProductCategories = () => {
         const url = this.BASE_URL + "/api/v1/hashmart/get-product-category";
         axios.get(url, this.CONFIG).then(resp=> {
@@ -73,6 +94,11 @@ export class Services {
 
     createSubCategory = (data) => {
         const url =  this.BASE_URL + "/api/v1/hashmart/create-sub-category";
+        this.__completeSubmission(url, data);
+    };
+
+    addProductFeature = (code, data) => {
+        const url =  `${this.BASE_URL}/api/v1/hashmart/add-product-feature/${code}`;
         this.__completeSubmission(url, data);
     };
 
@@ -188,7 +214,7 @@ export class Services {
             const url = this.BASE_URL + "/api/v1/hashmart/create-business";
             return axios.post(url, data).then(resp => {
                 localStorage.setItem("token", resp.data.token);
-                localStorage.setItem("expiry", now.setMinutes(now.getMinutes() + 10).toString());
+                localStorage.setItem("expiry", now.setMinutes(now.getMinutes() + 1).toString());
                 console.log("refreshed")
             }).catch(err => {
                 _this.__handleCatch(err);

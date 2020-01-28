@@ -29,6 +29,8 @@ import ProductCategoryView from "../../pages/products/ProductCategoryView";
 import CategoryDetail from "../../pages/products/CategoryDetail";
 import SubCategory from "../../pages/products/SubCategory";
 import Brand from "../../pages/products/Brand";
+import ProductList from "../../pages/products/ProductList";
+import ProductDetail from "../../pages/products/ProductDetail";
 
 class Layout extends React.Component {
   constructor(props) {
@@ -64,6 +66,8 @@ class Layout extends React.Component {
               <Route path="/app/sub-category/:productCategoryCode/:categoryCode/:subCategoryCode" exact component={SubCategory} />
               <Route path="/app/brand/:productCategoryCode/:categoryCode/:subCategoryCode/:brandCode" exact component={Brand} />
               <Route path="/app/business" exact component={BusinessList} />
+              <Route path="/app/products" exact component={ProductList} />
+              <Route path="/app/product/:productCode" exact component={ProductDetail} />
               <Route path="/app/business/:id" exact component={BusinessDetail} />
               <Route path="/app/typography" exact component={Typography} />
               <Route path="/app/tables" exact component={Tables} />
