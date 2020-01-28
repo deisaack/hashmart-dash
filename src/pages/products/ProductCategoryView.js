@@ -27,8 +27,7 @@ class ProductCategoryView extends Component {
 
     componentDidMount() {
         let code = this.getCode();
-        this.services.getSingleProductCategory(code);
-        this.services.getCategoriesUnderProductCategory(code)
+        this.services.getProductItem(code);
     }
 
     getCode = function() {
@@ -228,10 +227,8 @@ class ProductCategoryView extends Component {
                                     <tr>
                                         <th className="hidden-sm-down">#</th>
                                         <th>Code</th>
-                                        <th>Name</th>
-                                        <th className="hidden-sm-down">County</th>
-                                        <th className="hidden-sm-down">Phone</th>
-                                        <th className="hidden-sm-down">Status</th>
+                                        <th>Description</th>
+                                        <th className="hidden-sm-down">Image</th>
                                         <th />
                                     </tr>
                                     </thead>
@@ -240,12 +237,10 @@ class ProductCategoryView extends Component {
                                         this.state.categoryList.map((item, key) =>
                                             <tr key={key}>
                                                 <td>{key+1}</td>
-                                                <td>{item.companyCode}</td>
-                                                <td>{item.legalOrTradingName}</td>
-                                                <td>{item.countyOrState}</td>
-                                                <td>{item.primaryPhoneNumber}</td>
-                                                <td>{item.status}</td>
-                                                <td><Link to={`/app/category/view/1${item.companyCode}`}><i className="fa fa-eye" /></Link></td>
+                                                <td>{item.categoryCode}</td>
+                                                <td>{item.categoryDescription}</td>
+                                                <td>{item.imageUrl}</td>
+                                                <td><Link to={`/app/category/${this.state.code}/${item.categoryCode}`}><i className="fa fa-eye" /></Link></td>
                                             </tr>
                                         )
                                     }

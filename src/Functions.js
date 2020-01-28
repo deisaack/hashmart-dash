@@ -13,8 +13,24 @@ export class Functions {
         this.that.services.refreshToken();
     }
 
+    float = value => {
+        try {
+            value = value.replace(/,/g, "");
+        } catch (e) {
+            value = value;
+        }
+        if (isNaN(value)) {
+            value = 0;
+        }
+        return parseFloat(value);
+    };
+
+    twoDp = value => {
+        value = this.float(value);
+        return Math.ceil(value * 100) / 100;
+    };
+
     showSuccess = () => {
-        console.log("B");
         let alert = (
                 <SweetAlert
                     success
@@ -25,7 +41,6 @@ export class Functions {
                 >
                 </SweetAlert>
             );
-        console.log("C");
         this.that.setState({alert: alert})
     };
 

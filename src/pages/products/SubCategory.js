@@ -11,7 +11,7 @@ import cx from "classnames";
 import s from "../dashboard/Dashboard.module.scss";
 import {Link} from "react-router-dom";
 
-class CategoryDetail extends Component {
+class SubCategory extends Component {
 
     constructor(props) {
         super(props);
@@ -23,24 +23,32 @@ class CategoryDetail extends Component {
             form: "",
             subCategoryList: [],
             subCategories: [],
-            productCategory: {}
+            brandsList: [],
+            subCategory: {}
         }
     }
 
     componentDidMount() {
-        this.services.getProductItem(this.getProductCategory(), this.getCode())
+        this.services.getProductItem(this.getProductCategory(), this.getCategory(), this.getSubCategory())
     }
 
-    getCode = function() {
-        const { match: { params } } = this.props;
-        this.setState({code: params.id});
-        return params.id
-    };
 
     getProductCategory = function() {
         const { match: { params } } = this.props;
-        this.setState({productCategory: params.productCategory});
-        return params.productCategory
+        this.setState({productCategoryCode: params.productCategoryCode});
+        return params.productCategoryCode
+    };
+
+    getCategory = function() {
+        const { match: { params } } = this.props;
+        this.setState({categoryCode: params.categoryCode});
+        return params.categoryCode
+    };
+
+    getSubCategory = function() {
+        const { match: { params } } = this.props;
+        this.setState({subCategoryCode: params.subCategoryCode});
+        return params.subCategoryCode
     };
 
     subCategoryForm = () => {
@@ -49,16 +57,13 @@ class CategoryDetail extends Component {
 
     submitForm = () => {
         let data = {
-            "categoryCode": this.state.code,
-            "categoryDescription": this.state.categoryDescription,
-            "imageUrl": this.state.imageUrl,
-            "productCategoryCode": this.state.productCategory.productCategoryCode
+            "productcode": this.state.productCategoryCode,
+            "categorycode": this.state.categoryCode,
+            "subcategorycode": this.state.subCategoryCode,
+            "brandName": this.state.brandName
         };
-        this.services.createSubCategory(data)
+        this.services.createBrand(data)
     };
-
-
-
 
     render() {
         return (
@@ -68,9 +73,10 @@ class CategoryDetail extends Component {
                     <BreadcrumbItem>YOU ARE HERE</BreadcrumbItem>
                     <BreadcrumbItem>Product Categories</BreadcrumbItem>
                     <BreadcrumbItem>Categories</BreadcrumbItem>
-                    <BreadcrumbItem active>{this.state.category.categoryCode}</BreadcrumbItem>
+                    <BreadcrumbItem>Sub categories</BreadcrumbItem>
+                    <BreadcrumbItem active>{this.state.subCategory.subCategoryCode}</BreadcrumbItem>
                 </Breadcrumb>
-            <h1 className="page-title mb-lg"><span className="fw-semi-bold">{this.state.category.categoryDescription}</span></h1>
+                <h1 className="page-title mb-lg"><span className="fw-semi-bold">{this.state.subCategory.subCategoryDescription}</span></h1>
                 <Widget>
                     <Row>
                         <Col sm={2}>
@@ -93,68 +99,14 @@ class CategoryDetail extends Component {
                     >
                         <Form>
                             <Row form>
-                                <Col md={6}>
+                                <Col md={12}>
                                     <FormGroup>
-                                        <Label for="categoryDescription">Description</Label>
+                                        <Label for="brandName">Brand Name</Label>
                                         <Input
                                             onFocus={this.funcs.handleFocus}
                                             onBlur={this.funcs.handleBlur}
                                             onChange={this.funcs.handleChange}
-                                            type="text" name="categoryDescription" id="categoryDescription"
-                                            placeholder="" />
-                                    </FormGroup>
-                                </Col>
-                                <Col md={6}>
-                                    <FormGroup>
-                                        <Label for="imageUrl">Image URL</Label>
-                                        <Input
-                                            onFocus={this.funcs.handleFocus}
-                                            onBlur={this.funcs.handleBlur}
-                                            onChange={this.funcs.handleChange}
-                                            // value={this.state.legalOrTradingName}
-                                            type="text" name="imageUrl" id="imageUrl"
-                                            placeholder="" />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                            <Row form>
-                                <Col md={8} className="" />
-                                <Col md={4} className="pull-right">
-                                    <Button className="pull-right btn-info" onClick={this.funcs.handleClickSubmit}>Submit</Button>
-                                </Col>
-                            </Row>
-                        </Form>
-                    </Widget>
-                ): ""}
-
-                {this.state.form === "imageUpload" ? (
-                    <Widget
-                        title={<h5>
-                            Create Category
-                        </h5>} settings close
-                    >
-                        <Form>
-                            <Row form>
-                                <Col md={6}>
-                                    <FormGroup>
-                                        <Label for="categoryDescription">Description</Label>
-                                        <Input
-                                            onFocus={this.funcs.handleFocus}
-                                            onBlur={this.funcs.handleBlur}
-                                            onChange={this.funcs.handleChange}
-                                            type="text" name="categoryDescription" id="categoryDescription"
-                                            placeholder="" />
-                                    </FormGroup>
-                                </Col>
-                                <Col md={6}>
-                                    <FormGroup>
-                                        <Label for="imageUrl">Image URL</Label>
-                                        <Input
-                                            onFocus={this.funcs.handleFocus}
-                                            onBlur={this.funcs.handleBlur}
-                                            onChange={this.funcs.handleChange}
-                                            // value={this.state.legalOrTradingName}
-                                            type="text" name="imageUrl" id="imageUrl"
+                                            type="text" name="brandName" id="brandName"
                                             placeholder="" />
                                     </FormGroup>
                                 </Col>
@@ -175,13 +127,12 @@ class CategoryDetail extends Component {
                             title={
                                 <div>
                                     <Col sm={9}>
-                                        <h5>Product Category Detail</h5>
+                                        <h5>Sub Category Detail</h5>
                                     </Col>
                                     <Col sm={3}>
                                         {/*<Button className=" btn btn-indigo btn-sm" onClick={this.showMyBusinesses}>*/}
                                         {/*    <i className="fa fa-institution" /> My Businesses*/}
                                         {/*</Button>*/}
-
                                     </Col>
                                 </div>
                             }
@@ -195,16 +146,16 @@ class CategoryDetail extends Component {
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>Category Code</td>
-                                    <td>{this.state.category.categoryCode}</td>
+                                    <td>Sub Category Code</td>
+                                    <td>{this.state.subCategory.subCategoryCode}</td>
                                 </tr>
                                 <tr>
                                     <td>Description</td>
-                                    <td>{this.state.category.categoryDescription}</td>
+                                    <td>{this.state.subCategory.subCategoryDescription}</td>
                                 </tr>
                                 <tr>
                                     <td>Image</td>
-                                    <td>{this.state.category.imageUrl}</td>
+                                    <td>{this.state.subCategory.imageUrl}</td>
                                 </tr>
                                 </tbody>
                             </Table>
@@ -215,7 +166,7 @@ class CategoryDetail extends Component {
                             title={
                                 <Row style={{marginBottom: "5px"}}>
                                     <Col sm={8}>
-                                        <h5>Sub Categories</h5>
+                                        <h5>Brands</h5>
                                     </Col>
                                     <Col sm={4}>
                                         <Button className="pull-right btn btn-success btn-sm" onClick={this.subCategoryForm}>
@@ -230,20 +181,18 @@ class CategoryDetail extends Component {
                                 <tr>
                                     <th className="hidden-sm-down">#</th>
                                     <th>Code</th>
-                                    <th>Description</th>
-                                    <th className="hidden-sm-down">Image</th>
+                                    <th>Brand Name</th>
                                     <th />
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {
-                                    this.state.subCategories.map((item, key) =>
+                                    this.state.brandsList.map((item, key) =>
                                         <tr key={key}>
                                             <td>{key+1}</td>
-                                            <td>{item.subCategoryCode}</td>
-                                            <td>{item.subCategoryDescription}</td>
-                                            <td>{item.imageUrl}</td>
-                                            <td><Link to={`/app/sub-category/${this.state.productCategory.productCategoryCode}/${this.state.category.categoryCode}/${item.subCategoryCode}`}><i className="fa fa-eye" /></Link></td>
+                                            <td>{item.brandCode}</td>
+                                            <td>{item.brandName}</td>
+                                            <td><Link to={`/app/brand/${this.state.productCategory.productCategoryCode}/${this.state.category.categoryCode}/${this.state.subCategory.subCategoryCode}/${item.brandCode}`}><i className="fa fa-eye" /></Link></td>
                                         </tr>
                                     )
                                 }
@@ -259,4 +208,4 @@ class CategoryDetail extends Component {
 
 }
 
-export default CategoryDetail;
+export default SubCategory;

@@ -50,7 +50,7 @@ export class Services {
     getAllProductCategories = () => {
         const url = this.BASE_URL + "/api/v1/hashmart/get-product-category";
         axios.get(url, this.CONFIG).then(resp=> {
-            this.that.setState({productCategoryList: resp.data})
+            this.that.setState({productCategoryList: resp.data, })
         }).catch(err=>{this.__handleCatch(err);})
     };
 
@@ -68,6 +68,21 @@ export class Services {
 
     createCategory = (data) => {
         const url =  this.BASE_URL + "/api/v1/hashmart/create-category";
+        this.__completeSubmission(url, data);
+    };
+
+    createSubCategory = (data) => {
+        const url =  this.BASE_URL + "/api/v1/hashmart/create-sub-category";
+        this.__completeSubmission(url, data);
+    };
+
+    createBrand = (data) => {
+        const url =  this.BASE_URL + "/api/v1/hashmart/create-brand";
+        this.__completeSubmission(url, data);
+    };
+
+    createProduct = (data) => {
+        const url =  this.BASE_URL + "/api/v1/hashmart/create-product";
         this.__completeSubmission(url, data);
     };
 
@@ -90,26 +105,79 @@ export class Services {
         }).catch(err=>{this.__handleCatch(err);})
     };
 
-    getSingleProductCategory = (code) => {
-        const url =  this.BASE_URL + `/api/v1/hashmart/get-product-category/${code}`;
+    getSingleCategory = (productCategory, categoryCode) => {
+        const url =  this.BASE_URL + `/api/v1/hashmart/get-product-category/${productCategory}`;
         axios.get(url).then(resp=> {
-            this.that.setState({productCategory: resp.data[0], isLoading: false})
+            let productCategory = resp.data[0];
+            let categoryList = productCategory.category;
+            let category = {};
+            let subCategory = [];
+            categoryList.map((item, key) => {
+                if(item.categoryCode === categoryCode) {
+                    category = item;
+                    subCategory = item.subCategory;
+                }
+            });
+            this.that.setState({
+                    productCategory: resp.data[0],
+                    isLoading: false,
+                    categoryList: resp.data[0].category,
+                    category: category,
+                    subCategory: subCategory
+                }
+            );
+            console.log("A", productCategory, categoryList, category, subCategory);
         }).catch(err=>{this.__handleCatch(err);})
     };
 
-    getCategoriesUnderProductCategory = (code) => {
-        const url =  this.BASE_URL + `/api/v1/hashmart/get-product-category/${code}`;
+    getProductItem = (productCategory, categoryCode, subCategoryCode, brandCode) => {
+        const url =  this.BASE_URL + `/api/v1/hashmart/get-product-category/${productCategory}`;
         axios.get(url).then(resp=> {
-            this.that.setState({categoryList: resp.data, isLoading: false})
+            let productCategory = resp.data[0];
+            let categoryList = productCategory.category;
+            let category = {};
+            let subCategories = [];
+            let subCategory = {};
+            let brandsList = [];
+            let brand = {};
+            categoryList.map((item, key) => {
+                if(item.categoryCode === categoryCode) {
+                    category = item;
+                    subCategories = item.subCategory;
+                    subCategories.map((obj, id)=>{
+                        if(obj.subCategoryCode === subCategoryCode) {
+                            subCategory = obj;
+                            brandsList = obj.brand;
+                            brandsList.map((o, id)=>{
+                                if(o.brandCode === brandCode) {
+                                    brand = o;
+                                }
+                            })
+                        }
+                    })
+                }
+            });
+            this.that.setState({
+                    productCategory: resp.data[0],
+                    isLoading: false,
+                    categoryList: resp.data[0].category,
+                    category: category,
+                    subCategories: subCategories,
+                    subCategory: subCategory,
+                    brandsList: brandsList,
+                    brand: brand,
+                }
+            );
+            console.log("productCategory", productCategory);
+            console.log("categoryList", categoryList);
+            console.log("category", category);
+            console.log("subCategory", subCategory);
+            console.log("brandsList", brandsList);
+            console.log("brand->", brand);
+            console.log("<-brand");
         }).catch(err=>{this.__handleCatch(err);})
     };
 
-    getSingleCategory = (code) => {
-        const url =  this.BASE_URL + `/api/v1/hashmart/get-product-category/${code}`;
-        return axios.get(url).then(resp=> {
-            this.that.setState({productCategory: resp.data[0], isLoading: false})
-        }).catch(err=>{this.__handleCatch(err);})
-    };
 
     refreshToken = (data) => {
         let _this = this;
