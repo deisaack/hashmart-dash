@@ -9,18 +9,8 @@ import Sidebar from '../Sidebar';
 
 // Dashboard component is loaded directly as an example of server side rendering
 import Dashboard from '../../pages/dashboard'
-import Buttons from '../../pages/buttons'
-import Charts from '../../pages/charts'
-import Maps from '../../pages/google'
 import NotFound from '../../pages/notFound'
-import Icons from '../../pages/icons'
-import Typography from '../../pages/typography'
-import Tables from '../../pages/tables'
-import Notifications from '../../pages/notifications'
-import Posts from '../../pages/posts'
 import Profile from '../../pages/profile'
-import Privacy from '../../pages/privacy'
-import OldDashboard from "../../pages/dashboard/OldDashboard";
 import BusinessList from "../../pages/business/BusinessList";
 import BusinessDetail from "../../pages/business/BusinessDetail";
 import ProductCategory from "../../pages/products/ProductCategory";
@@ -57,7 +47,6 @@ class Layout extends React.Component {
           />
           <main className={s.content}>
             <Switch>
-              <Route path="/app/admin" exact component={OldDashboard} />
               <Route path="/app/main" exact component={Dashboard} />
               <Route path="/app/product-category" exact component={ProductCategory} />
               <Route path="/app/product-category/create" exact component={CreateProductCategory} />
@@ -69,16 +58,6 @@ class Layout extends React.Component {
               <Route path="/app/products" exact component={ProductList} />
               <Route path="/app/product/:productCode" exact component={ProductDetail} />
               <Route path="/app/business/:id" exact component={BusinessDetail} />
-              <Route path="/app/typography" exact component={Typography} />
-              <Route path="/app/tables" exact component={Tables} />
-              <Route path="/app/posts" component={Posts} />
-              <Route path="/app/privacy" exact component={Privacy} />
-              <Route path="/app/profile" exact component={Profile} />
-              <Route path="/app/notifications" exact component={Notifications} /> 
-              <Route path="/app/components/buttons" exact component={Buttons} />
-              <Route path="/app/components/charts" exact component={Charts} />
-              <Route path="/app/components/icons" exact component={Icons} />
-              <Route path="/app/components/maps" exact component={Maps} />
               <Route component={NotFound} />
             </Switch>
           </main>

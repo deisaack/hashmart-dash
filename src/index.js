@@ -8,7 +8,7 @@ import axios from 'axios';
 
 import App from './components/App';
 import config from './config';
-import reducers from './reducers';
+// import reducers from './reducers';
 
 axios.defaults.baseURL = config.baseUrl;
 axios.defaults.headers.common['Content-Type'] = "application/json";
@@ -18,7 +18,7 @@ if (token) {
 }
 
 const store = createStore(
-  reducers,
+  // reducers,
   applyMiddleware(ReduxThunk)
 );
 

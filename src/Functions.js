@@ -175,4 +175,9 @@ export class Functions {
         }
     };
 
+    logoutUser = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("created");
+    }
+
 }
