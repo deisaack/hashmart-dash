@@ -10,6 +10,12 @@ import Widget from "../../components/Widget";
 import cx from "classnames";
 import s from "../dashboard/Dashboard.module.scss";
 import {Link} from "react-router-dom";
+import Card from "reactstrap/es/Card";
+import CardImg from "reactstrap/es/CardImg";
+import CardBody from "reactstrap/es/CardBody";
+import CardTitle from "reactstrap/es/CardTitle";
+import CardSubtitle from "reactstrap/es/CardSubtitle";
+import CardText from "reactstrap/es/CardText";
 
 class Brand extends Component {
 
@@ -90,20 +96,6 @@ class Brand extends Component {
                     <BreadcrumbItem active>{this.state.brand.brandCode}</BreadcrumbItem>
                 </Breadcrumb>
                 <h1 className="page-title mb-lg"><span className="fw-semi-bold">{this.state.brand.brandName}</span></h1>
-                <Widget>
-                    <Row>
-                        <Col sm={2}>
-                            {/*<Button className="pull-right btn btn-success btn-sm" onClick={()=>this.setState({"subCategory"})}>*/}
-                            {/*    <i className="fa fa-cloud-upload" /> Create*/}
-                            {/*</Button>*/}
-                        </Col>
-                        <Col sm={2}>
-                            <Button className="pull-right btn btn-success btn-sm" onClick={this.imageUploadForm}>
-                                <i className="fa fa-cloud-upload" /> Upload Image
-                            </Button>
-                        </Col>
-                    </Row>
-                </Widget>
                 {this.state.form === "productForm" ? (
                     <Widget
                         title={<h5>

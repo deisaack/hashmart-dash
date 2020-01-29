@@ -10,6 +10,12 @@ import Widget from "../../components/Widget";
 import cx from "classnames";
 import s from "../dashboard/Dashboard.module.scss";
 import {Link} from "react-router-dom";
+import Card from "reactstrap/es/Card";
+import CardImg from "reactstrap/es/CardImg";
+import CardBody from "reactstrap/es/CardBody";
+import CardTitle from "reactstrap/es/CardTitle";
+import CardSubtitle from "reactstrap/es/CardSubtitle";
+import CardText from "reactstrap/es/CardText";
 
 class SubCategory extends Component {
 
@@ -51,10 +57,6 @@ class SubCategory extends Component {
         return params.subCategoryCode
     };
 
-    subCategoryForm = () => {
-        this.setState({form: "subCategory"})
-    };
-
     submitForm = () => {
         let data = {
             "productcode": this.state.productCategoryCode,
@@ -77,24 +79,10 @@ class SubCategory extends Component {
                     <BreadcrumbItem active>{this.state.subCategory.subCategoryCode}</BreadcrumbItem>
                 </Breadcrumb>
                 <h1 className="page-title mb-lg"><span className="fw-semi-bold">{this.state.subCategory.subCategoryDescription}</span></h1>
-                <Widget>
-                    <Row>
-                        <Col sm={2}>
-                            {/*<Button className="pull-right btn btn-success btn-sm" onClick={()=>this.setState({"subCategory"})}>*/}
-                            {/*    <i className="fa fa-cloud-upload" /> Create*/}
-                            {/*</Button>*/}
-                        </Col>
-                        <Col sm={2}>
-                            <Button className="pull-right btn btn-success btn-sm" onClick={this.imageUploadForm}>
-                                <i className="fa fa-cloud-upload" /> Upload Image
-                            </Button>
-                        </Col>
-                    </Row>
-                </Widget>
-                {this.state.form === "subCategory" ? (
+                {this.state.form === "brand" ? (
                     <Widget
                         title={<h5>
-                            Create Category
+                            Create A Brand
                         </h5>} settings close
                     >
                         <Form>
@@ -123,43 +111,17 @@ class SubCategory extends Component {
 
                 <Row>
                     <Col sm={12} md={6}>
-                        <Widget
-                            title={
-                                <div>
-                                    <Col sm={9}>
-                                        <h5>Sub Category Detail</h5>
-                                    </Col>
-                                    <Col sm={3}>
-                                        {/*<Button className=" btn btn-indigo btn-sm" onClick={this.showMyBusinesses}>*/}
-                                        {/*    <i className="fa fa-institution" /> My Businesses*/}
-                                        {/*</Button>*/}
-                                    </Col>
-                                </div>
-                            }
-                        >
-                            <Table responsive striped className={cx('mb-0', s.usersTable)}>
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>Sub Category Code</td>
-                                    <td>{this.state.subCategory.subCategoryCode}</td>
-                                </tr>
-                                <tr>
-                                    <td>Description</td>
-                                    <td>{this.state.subCategory.subCategoryDescription}</td>
-                                </tr>
-                                <tr>
-                                    <td>Image</td>
-                                    <td>{this.state.subCategory.imageUrl}</td>
-                                </tr>
-                                </tbody>
-                            </Table>
-                        </Widget>
+                        <div>
+                            <Card>
+                                <CardImg top width="100%" src={this.state.subCategory.imageUrl} alt="Card image cap" />
+                                <CardBody>
+                                    <CardTitle>{this.state.subCategory.subCategoryCode}</CardTitle>
+                                    <CardSubtitle>Sub Category Detail</CardSubtitle>
+                                    <CardText>{this.state.subCategory.subCategoryDescription}.</CardText>
+                                    {/*<Button>Button</Button>*/}
+                                </CardBody>
+                            </Card>
+                        </div>
                     </Col>
                     <Col sm={12} md={6}>
                         <Widget
@@ -169,7 +131,7 @@ class SubCategory extends Component {
                                         <h5>Brands</h5>
                                     </Col>
                                     <Col sm={4}>
-                                        <Button className="pull-right btn btn-success btn-sm" onClick={this.subCategoryForm}>
+                                        <Button className="pull-right btn btn-success btn-sm" onClick={()=>this.funcs.showForm("brand")}>
                                             <i className="fa fa-plus" /> Add
                                         </Button>
                                     </Col>
@@ -205,7 +167,6 @@ class SubCategory extends Component {
             </div>
         );
     }
-
 }
 
 export default SubCategory;

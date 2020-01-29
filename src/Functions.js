@@ -10,7 +10,6 @@ export class Functions {
             that: that
         };
         this.that = that;
-        this.that.services.login();
         this.that.services.refreshToken();
     }
 

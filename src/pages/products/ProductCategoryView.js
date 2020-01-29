@@ -47,7 +47,7 @@ class ProductCategoryView extends Component {
     submitForm = () => {
         let data = {
             "categoryDescription": this.state.categoryDescription,
-            "imageUrl": this.state.imageUrl,
+            // "imageUrl": this.state.imageUrl,
             "productCategoryCode": this.state.code,
         };
         this.services.createCategory(data)
@@ -86,7 +86,7 @@ class ProductCategoryView extends Component {
                     >
                         <Form>
                             <Row form>
-                                <Col md={6}>
+                                <Col md={12}>
                                     <FormGroup>
                                         <Label for="categoryDescription">Description</Label>
                                         <Input
@@ -97,18 +97,18 @@ class ProductCategoryView extends Component {
                                             placeholder="" />
                                     </FormGroup>
                                 </Col>
-                                <Col md={6}>
-                                    <FormGroup>
-                                        <Label for="imageUrl">Image URL</Label>
-                                        <Input
-                                            onFocus={this.funcs.handleFocus}
-                                            onBlur={this.funcs.handleBlur}
-                                            onChange={this.funcs.handleChange}
-                                            // value={this.state.legalOrTradingName}
-                                            type="text" name="imageUrl" id="imageUrl"
-                                            placeholder="" />
-                                    </FormGroup>
-                                </Col>
+                                {/*<Col md={6}>*/}
+                                {/*    <FormGroup>*/}
+                                {/*        <Label for="imageUrl">Image URL</Label>*/}
+                                {/*        <Input*/}
+                                {/*            onFocus={this.funcs.handleFocus}*/}
+                                {/*            onBlur={this.funcs.handleBlur}*/}
+                                {/*            onChange={this.funcs.handleChange}*/}
+                                {/*            // value={this.state.legalOrTradingName}*/}
+                                {/*            type="text" name="imageUrl" id="imageUrl"*/}
+                                {/*            placeholder="" />*/}
+                                {/*    </FormGroup>*/}
+                                {/*</Col>*/}
                             </Row>
                             <Row form>
                                 <Col md={8} className="" />
@@ -228,7 +228,6 @@ class ProductCategoryView extends Component {
                                         <th className="hidden-sm-down">#</th>
                                         <th>Code</th>
                                         <th>Description</th>
-                                        <th className="hidden-sm-down">Image</th>
                                         <th />
                                     </tr>
                                     </thead>
@@ -239,7 +238,6 @@ class ProductCategoryView extends Component {
                                                 <td>{key+1}</td>
                                                 <td>{item.categoryCode}</td>
                                                 <td>{item.categoryDescription}</td>
-                                                <td>{item.imageUrl}</td>
                                                 <td><Link to={`/app/category/${this.state.code}/${item.categoryCode}`}><i className="fa fa-eye" /></Link></td>
                                             </tr>
                                         )

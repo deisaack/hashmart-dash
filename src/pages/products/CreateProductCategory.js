@@ -80,18 +80,7 @@ class CreateProductCategory extends Component {
                         >
                             <Form>
                                 <Row form>
-                                    <Col md={6}>
-                                        <FormGroup>
-                                            <Label for="productCategoryCode">Code</Label>
-                                            <Input
-                                                onFocus={this.funcs.handleFocus}
-                                                onBlur={this.funcs.handleBlur}
-                                                onChange={this.funcs.handleChange}
-                                                type="text" name="productCategoryCode" id="productCategoryCode"
-                                                placeholder="" />
-                                        </FormGroup>
-                                    </Col>
-                                    <Col md={6}>
+                                    <Col md={12}>
                                         <FormGroup>
                                             <Label for="productCategoryDescription">Description</Label>
                                             <Input

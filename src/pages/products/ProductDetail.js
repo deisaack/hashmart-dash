@@ -9,7 +9,6 @@ import {
 
 import Widget from '../../components/Widget';
 import s from '../../styles/Static.module.scss';
-import {Link} from "react-router-dom";
 import {Services} from "../../Services";
 import {Functions} from "../../Functions";
 
@@ -33,6 +32,7 @@ class ProductDetail extends Component {
 
     componentDidMount() {
         this.services.getSingleProduct(this.getProductCode());
+        this.services.getProductChangeInStock(this.getProductCode());
     }
 
     getProductCode = function() {
@@ -60,7 +60,6 @@ class ProductDetail extends Component {
             };
             this.services.createBrand(data)
         }
-
     };
 
     render() {
@@ -124,39 +123,39 @@ class ProductDetail extends Component {
                         >
                             {this.state.form === "productFiles" ? (
 
-                                    <Form>
-                                        <Row form>
-                                            <Col md={6}>
-                                                <FormGroup>
-                                                    <Label for="categoryDescription">Description</Label>
-                                                    <Input
-                                                        onFocus={this.funcs.handleFocus}
-                                                        onBlur={this.funcs.handleBlur}
-                                                        onChange={this.funcs.handleChange}
-                                                        type="text" name="categoryDescription" id="categoryDescription"
-                                                        placeholder="" />
-                                                </FormGroup>
-                                            </Col>
-                                            <Col md={6}>
-                                                <FormGroup>
-                                                    <Label for="imageUrl">Image URL</Label>
-                                                    <Input
-                                                        onFocus={this.funcs.handleFocus}
-                                                        onBlur={this.funcs.handleBlur}
-                                                        onChange={this.funcs.handleChange}
-                                                        // value={this.state.legalOrTradingName}
-                                                        type="text" name="imageUrl" id="imageUrl"
-                                                        placeholder="" />
-                                                </FormGroup>
-                                            </Col>
-                                        </Row>
-                                        <Row form>
-                                            <Col md={8} className="" />
-                                            <Col md={4} className="pull-right">
-                                                <Button className="pull-right btn-info btn-sm" onClick={this.funcs.handleClickSubmit}>Submit</Button>
-                                            </Col>
-                                        </Row>
-                                    </Form>
+                                <Form>
+                                    <Row form>
+                                        <Col md={6}>
+                                            <FormGroup>
+                                                <Label for="categoryDescription">Description</Label>
+                                                <Input
+                                                    onFocus={this.funcs.handleFocus}
+                                                    onBlur={this.funcs.handleBlur}
+                                                    onChange={this.funcs.handleChange}
+                                                    type="text" name="categoryDescription" id="categoryDescription"
+                                                    placeholder="" />
+                                            </FormGroup>
+                                        </Col>
+                                        <Col md={6}>
+                                            <FormGroup>
+                                                <Label for="imageUrl">Image URL</Label>
+                                                <Input
+                                                    onFocus={this.funcs.handleFocus}
+                                                    onBlur={this.funcs.handleBlur}
+                                                    onChange={this.funcs.handleChange}
+                                                    // value={this.state.legalOrTradingName}
+                                                    type="text" name="imageUrl" id="imageUrl"
+                                                    placeholder="" />
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+                                    <Row form>
+                                        <Col md={8} className="" />
+                                        <Col md={4} className="pull-right">
+                                            <Button className="pull-right btn-info btn-sm" onClick={this.funcs.handleClickSubmit}>Submit</Button>
+                                        </Col>
+                                    </Row>
+                                </Form>
                             ): ""}
                             <Table borderless className={s.mainTable}>
                                 <thead>
@@ -250,6 +249,83 @@ class ProductDetail extends Component {
                                             <td>{item.featureCode}</td>
                                             <td>{item.description}</td>
                                             <td>{item.name}</td>
+                                        </tr>
+                                    )
+                                }
+                                </tbody>
+                            </Table>
+                        </Widget>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col sm={12} md={6}>
+                        <Widget
+                            title={
+                                <Row style={{marginBottom: "5px"}}>
+                                    <Col sm={8}>
+                                        <h5>Changes in stock</h5>
+                                    </Col>
+                                    <Col sm={4}>
+                                        <Button className="pull-right btn btn-success btn-sm" onClick={()=>this.funcs.showForm("stock")}>
+                                            <i className="fa fa-plus" /> Add
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            } settings close
+                        >
+                            {this.state.form === "productFiles" ? (
+
+                                <Form>
+                                    <Row form>
+                                        <Col md={6}>
+                                            <FormGroup>
+                                                <Label for="categoryDescription">Description</Label>
+                                                <Input
+                                                    onFocus={this.funcs.handleFocus}
+                                                    onBlur={this.funcs.handleBlur}
+                                                    onChange={this.funcs.handleChange}
+                                                    type="text" name="categoryDescription" id="categoryDescription"
+                                                    placeholder="" />
+                                            </FormGroup>
+                                        </Col>
+                                        <Col md={6}>
+                                            <FormGroup>
+                                                <Label for="imageUrl">Image URL</Label>
+                                                <Input
+                                                    onFocus={this.funcs.handleFocus}
+                                                    onBlur={this.funcs.handleBlur}
+                                                    onChange={this.funcs.handleChange}
+                                                    // value={this.state.legalOrTradingName}
+                                                    type="text" name="imageUrl" id="imageUrl"
+                                                    placeholder="" />
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+                                    <Row form>
+                                        <Col md={8} className="" />
+                                        <Col md={4} className="pull-right">
+                                            <Button className="pull-right btn-info btn-sm" onClick={this.funcs.handleClickSubmit}>Submit</Button>
+                                        </Col>
+                                    </Row>
+                                </Form>
+                            ): ""}
+                            <Table borderless className={s.mainTable}>
+                                <thead>
+                                <tr>
+                                    <th className="hidden-sm-down">#</th>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                    <th className="hidden-sm-down">Image</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {
+                                    this.state.productFiles.map((item, key) =>
+                                        <tr key={key}>
+                                            <td>{key+1}</td>
+                                            <td>{item.subCategoryCode}</td>
+                                            <td>{item.subCategoryDescription}</td>
+                                            <td>{item.imageUrl}</td>
                                         </tr>
                                     )
                                 }

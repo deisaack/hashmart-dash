@@ -6,7 +6,6 @@ import {
     Breadcrumb,
     BreadcrumbItem,
 } from 'reactstrap';
-
 import Widget from '../../components/Widget';
 import s from '../../styles/Static.module.scss';
 import {Link} from "react-router-dom";
@@ -96,11 +95,9 @@ class ProductList extends Component {
                             </Table>
                         </Widget>
                     </Col>
-                    }
                 </Row>
             </div>
         );
     }
-
 }
 export default ProductList;

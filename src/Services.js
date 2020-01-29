@@ -3,7 +3,7 @@ import config from "./config";
 import axios from "axios"
 axios.defaults.baseURL = config.baseUrl;
 axios.defaults.headers.common['Content-Type'] = "application/json";
-const token = localStorage.getItem('token');
+const token = localStorage.getItem('authToken');
 if (token) {
     axios.defaults.headers.common['Authorization'] = "Bearer " + token;
 }
@@ -12,7 +12,7 @@ export class Services {
         this.that = that;
         this.BASE_URL = "https://hashmart.nyumbapap.com";
         this.AUTH = {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             "Access-Control-Allow-Origin": "*"
         };
         this.CONFIG = { headers: this.AUTH };
@@ -27,7 +27,7 @@ export class Services {
 
         const url = this.BASE_URL + "/api/v1/hashmart/login";
         return axios.post(url, data, this.CONFIG).then(resp=>{
-            localStorage.setItem("token", resp.data.token)
+            localStorage.setItem("authToken", resp.data.authToken)
             let now = new Date();
             localStorage.setItem("expiry", now.setMinutes(now.getMinutes() + 10).toString())
         }).catch(err=>{this.__handleCatch(err);})
@@ -50,6 +50,13 @@ export class Services {
     getAllProducts = () => {
         const url = this.BASE_URL + "/api/v1/hashmart/get-product-admin";
         return axios.get(url, this.CONFIG).then(resp=> {
+            this.that.setState({productList: resp.data, isLoading: false})
+        }).catch(err=>{this.__handleCatch(err);})
+    };
+
+    getProductChangeInStock = (productcode) => {
+        const url = `${this.BASE_URL}/api/v1/hashmart/get-changes-in-product-stock/${productcode}`;
+        axios.get(url, this.CONFIG).then(resp=> {
             this.that.setState({productList: resp.data, isLoading: false})
         }).catch(err=>{this.__handleCatch(err);})
     };
@@ -117,12 +124,6 @@ export class Services {
         this.__completeSubmission(url, data);
     };
 
-    updateBusiness = (data) => {
-        const url =  this.BASE_URL + "/api/v1/hashmart/create-business";
-        return axios.post(url, data).then(resp=> {
-            this.that.setState({isLoading: false})
-        }).catch(err=>{this.__handleCatch(err);})
-    };
 
     getSingleBusiness = (code) => {
         const url =  this.BASE_URL + `/api/v1/hashmart/get-single-business/${code}`;
@@ -206,14 +207,15 @@ export class Services {
 
 
     refreshToken = (data) => {
+        return
         let _this = this;
         let now = new Date();
         let expiry = new Date(localStorage.getItem("expiry"))
         console.log("Now", now, expiry);
         if (now>expiry) {
-            const url = this.BASE_URL + "/api/v1/hashmart/create-business";
+            const url = this.BASE_URL + "/api/v1/hashmart/refresh-token";
             return axios.post(url, data).then(resp => {
-                localStorage.setItem("token", resp.data.token);
+                localStorage.setItem("authToken", resp.data.authToken);
                 localStorage.setItem("expiry", now.setMinutes(now.getMinutes() + 1).toString());
                 console.log("refreshed")
             }).catch(err => {

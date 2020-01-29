@@ -109,7 +109,6 @@ class ProductCategory extends Component {
                             </Table>
                         </Widget>
                     </Col>
-                    }
                 </Row>
             </div>
         );
