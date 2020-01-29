@@ -1,16 +1,16 @@
-import React from 'react';
-import cx from 'classnames';
-import { Switch, Route, withRouter } from 'react-router';
+import React from "react";
+import cx from "classnames";
+import { Switch, Route, withRouter } from "react-router";
 
-import s from './Layout.module.scss';
-import Header from '../Header';
-import Footer from '../Footer';
-import Sidebar from '../Sidebar';
+import s from "./Layout.module.scss";
+import Header from "../Header";
+import Footer from "../Footer";
+import Sidebar from "../Sidebar";
 
 // Dashboard component is loaded directly as an example of server side rendering
-import Dashboard from '../../pages/dashboard'
-import NotFound from '../../pages/notFound'
-import Profile from '../../pages/profile'
+import Dashboard from "../../pages/dashboard";
+import NotFound from "../../pages/notFound";
+import Profile from "../../pages/profile";
 import BusinessList from "../../pages/business/BusinessList";
 import BusinessDetail from "../../pages/business/BusinessDetail";
 import ProductCategory from "../../pages/products/ProductCategory";
@@ -27,8 +27,14 @@ class Layout extends React.Component {
     super(props);
 
     this.state = {
-      sidebarOpen: false,
+      sidebarOpen: false
     };
+  }
+
+  componentDidMount() {
+    if (localStorage.getItem("token") === null) {
+      window.location.href = "/#/login";
+    }
   }
 
   render() {
@@ -36,28 +42,60 @@ class Layout extends React.Component {
       <div className={s.root}>
         <Sidebar />
         <div
-          className={cx(s.wrap, {[s.sidebarOpen]: this.state.sidebarOpen})}
+          className={cx(s.wrap, { [s.sidebarOpen]: this.state.sidebarOpen })}
         >
           <Header
             sidebarToggle={() =>
               this.setState({
-                sidebarOpen: !this.state.sidebarOpen,
+                sidebarOpen: !this.state.sidebarOpen
               })
             }
           />
           <main className={s.content}>
             <Switch>
               <Route path="/app/main" exact component={Dashboard} />
-              <Route path="/app/product-category" exact component={ProductCategory} />
-              <Route path="/app/product-category/create" exact component={CreateProductCategory} />
-              <Route path="/app/product-category/view/:id" exact component={ProductCategoryView} />
-              <Route path="/app/category/:productCategory/:id" exact component={CategoryDetail} />
-              <Route path="/app/sub-category/:productCategoryCode/:categoryCode/:subCategoryCode" exact component={SubCategory} />
-              <Route path="/app/brand/:productCategoryCode/:categoryCode/:subCategoryCode/:brandCode" exact component={Brand} />
+              <Route
+                path="/app/product-category"
+                exact
+                component={ProductCategory}
+              />
+              <Route
+                path="/app/product-category/create"
+                exact
+                component={CreateProductCategory}
+              />
+              <Route
+                path="/app/product-category/view/:id"
+                exact
+                component={ProductCategoryView}
+              />
+              <Route
+                path="/app/category/:productCategory/:id"
+                exact
+                component={CategoryDetail}
+              />
+              <Route
+                path="/app/sub-category/:productCategoryCode/:categoryCode/:subCategoryCode"
+                exact
+                component={SubCategory}
+              />
+              <Route
+                path="/app/brand/:productCategoryCode/:categoryCode/:subCategoryCode/:brandCode"
+                exact
+                component={Brand}
+              />
               <Route path="/app/business" exact component={BusinessList} />
               <Route path="/app/products" exact component={ProductList} />
-              <Route path="/app/product/:productCode" exact component={ProductDetail} />
-              <Route path="/app/business/:id" exact component={BusinessDetail} />
+              <Route
+                path="/app/product/:productCode"
+                exact
+                component={ProductDetail}
+              />
+              <Route
+                path="/app/business/:id"
+                exact
+                component={BusinessDetail}
+              />
               <Route component={NotFound} />
             </Switch>
           </main>

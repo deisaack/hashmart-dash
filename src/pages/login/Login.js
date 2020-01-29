@@ -5,6 +5,7 @@ import Widget from "../../components/Widget";
 import Footer from "../../components/Footer";
 import { Services } from "../../Services";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 class Login extends React.Component {
   constructor(props) {
@@ -35,14 +36,14 @@ class Login extends React.Component {
       .then(response => {
         if (response.status === 200) {
           this.setState({ changePassword: response.data.updatePassword });
-          localStorage.setItem("authToken", response.data.token);
+          localStorage.setItem("token", response.data.token);
           localStorage.setItem("initialTime", Date.now());
+          window.location.href = "/#/app/main";
           window.Env.refreshTokenInterval();
         }
       })
       .catch(error => {
         this.setState({ isLoading: false });
-        console.log("Error :", error.response);
         let errors = [...this.state.errors];
 
         if (error.response === undefined) {
@@ -121,11 +122,13 @@ class Login extends React.Component {
                   </a>{" "}
                   {/* eslint-disable-line */}
                   <div>
-                    <Button color="default" size="sm">
-                      Create an account
-                    </Button>
+                    <Link to={`/register`}>
+                      <Button color="default" size="sm">
+                        Create an account
+                      </Button>
+                    </Link>
                     <Button color="success" size="sm" type="submit">
-                      {this.props.isFetching ? "Loading..." : "Login"}
+                      {this.state.isLoading ? "Loading..." : "Login"}
                     </Button>
                   </div>
                 </div>
