@@ -67,10 +67,6 @@ class CategoryDetail extends Component {
     this.services.createSubCategory(data);
   };
 
-  imageUploadForm = () => {
-    console.log("UPLOADING IMAGE");
-  };
-
   render() {
     return (
       <div className={s.root}>
