@@ -41,7 +41,7 @@ class Tabbed extends Component {
       productFiles: [],
       form: "",
       changesInProductStock: [],
-      activeTab: ""
+      activeTab: "1"
     };
     this.services = new Services(this);
     this.funcs = new Functions(this);

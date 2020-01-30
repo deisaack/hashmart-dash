@@ -90,11 +90,6 @@ class Layout extends React.Component {
               <Route
                 path="/app/product/:productCode"
                 exact
-                component={ProductDetail}
-              />
-              <Route
-                path="/app/product-tabbed/:productCode"
-                exact
                 component={Tabbed}
               />
               <Route
