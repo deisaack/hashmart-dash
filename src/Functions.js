@@ -125,11 +125,26 @@ export class Functions {
 
   doNothing = event => {};
 
-  handleClickSubmit = () => {
+  handleClickSubmit = (...fields) => {
     const empty = [];
-    this.requiredFields.forEach(field =>
-      this.that.state[`${field}`] === "" ? empty.push(field) : false
-    );
+    console.log(typeof fields[0]);
+    if (typeof fields[0] === "string") {
+      fields.forEach(field =>
+        this.that.state[`${field}`] === "" ||
+        this.that.state[field] === undefined ||
+        this.that.state[field] === null
+          ? empty.push(field)
+          : false
+      );
+    } else {
+      this.requiredFields.forEach(field =>
+        this.that.state[`${field}`] === "" ||
+        this.that.state[field] === undefined ||
+        this.that.state[field] === null
+          ? empty.push(field)
+          : false
+      );
+    }
 
     if (empty.length > 0) {
       this.that.setState({
@@ -173,8 +188,11 @@ export class Functions {
   };
 
   logoutUser = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("authToken");
     localStorage.removeItem("created");
+    localStorage.removeItem("role");
+    localStorage.removeItem("businessCode");
+    // window.location.href = "/";
     this.refresh();
   };
 }

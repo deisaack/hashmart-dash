@@ -9,7 +9,11 @@ import {
   Form,
   FormGroup,
   Label,
-  Input
+  Input,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
 } from "reactstrap";
 import { Services } from "../../Services";
 import { Functions } from "../../Functions";
@@ -22,12 +26,13 @@ class ProductCategoryView extends Component {
   constructor(props) {
     super(props);
     this.services = new Services(this);
-    this.funcs = new Functions(this);
+    this.funcs = new Functions(this, "imageUrl", "categoryDescription");
     this.state = {
       business: {},
       productCategory: {},
       categoryList: [],
       form: ""
+      // productCategoryDescription: ""
     };
   }
 
@@ -56,7 +61,7 @@ class ProductCategoryView extends Component {
   submitForm = () => {
     let data = {
       categoryDescription: this.state.categoryDescription,
-      imageUrl: this.state.imageUrl,
+      // "imageUrl": this.state.imageUrl,
       productCategoryCode: this.state.code
     };
     this.services.createCategory(data);
@@ -73,6 +78,10 @@ class ProductCategoryView extends Component {
       `/api/v1/hashmart/upload-category-image?productcategorycode=${this.state.productCategory.productCategoryCode}&categorycode=${this.state.productCategory.category[0].categoryCode}`,
       data
     );
+  };
+
+  toggle = () => {
+    this.setState({ form: "" });
   };
 
   render() {
@@ -158,12 +167,8 @@ class ProductCategoryView extends Component {
 
         {this.state.form === "imageUpload" ? (
           <Widget title={<h5>Create Category</h5>} settings close>
-            <form
-              onSubmit={this.handleFileUpload}
-              id="productCategoryImageForm"
-            >
-              <Row form>
-                <Col md={4}>
+            <Row form>
+              {/* <Col md={4}>
                   <FormGroup>
                     <Label for="categoryDescription">Description</Label>
                     <Input
@@ -191,24 +196,73 @@ class ProductCategoryView extends Component {
                       placeholder=""
                     />
                   </FormGroup>
-                </Col>
-                <Col md={4}>
+                </Col> */}
+              {/* <Col md={4}>
                   <FormGroup>
                     <Label for="productCategoryImage">Image</Label>
                     <Input
-                      //   onFocus={this.funcs.handleFocus}
-                      //   onBlur={this.funcs.handleBlur}
-                      //   onChange={this.funcs.handleChange}
-                      // value={this.state.legalOrTradingName}
+                        onFocus={this.funcs.handleFocus}
+                        onBlur={this.funcs.handleBlur}
+                        onChange={this.funcs.handleChange}
+                      value={this.state.legalOrTradingName}
                       type="file"
                       name="productCategoryImage"
                       id="productCategoryImage"
                       placeholder=""
                     />
                   </FormGroup>
-                </Col>
-              </Row>
-              <Row form>
+                </Col> */}
+              <Modal isOpen={true} toggle={this.toggle}>
+                <ModalHeader cssModule={{ "modal-title": "w-100 text-center" }}>
+                  Upload Category Image
+                </ModalHeader>
+                <ModalBody>
+                  <form
+                    onSubmit={this.handleFileUpload}
+                    id="productCategoryImageForm"
+                  >
+                    <FormGroup>
+                      <Row>
+                        <Col md={2}>
+                          <Label
+                            for="productCategoryImage"
+                            className="text-right"
+                          >
+                            Image
+                          </Label>
+                        </Col>
+                        <Col md={8}>
+                          <Input
+                            onFocus={this.funcs.handleFocus}
+                            onBlur={this.funcs.handleBlur}
+                            onChange={this.funcs.handleChange}
+                            value={this.state.legalOrTradingName}
+                            type="file"
+                            name="productCategoryImage"
+                            id="productCategoryImage"
+                            placeholder=""
+                            // md={8}
+                          />
+                        </Col>{" "}
+                      </Row>
+                    </FormGroup>
+                  </form>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="warning" onClick={this.toggle}>
+                    Cancel
+                  </Button>{" "}
+                  <Button
+                    color="secondary"
+                    onClick={this.handleFileUpload}
+                    type="submit"
+                  >
+                    Upload
+                  </Button>
+                </ModalFooter>
+              </Modal>
+            </Row>
+            {/* <Row form>
                 <Col md={8} className="" />
                 <Col md={4} className="pull-right">
                   <Button
@@ -219,8 +273,7 @@ class ProductCategoryView extends Component {
                     Upload
                   </Button>
                 </Col>
-              </Row>
-            </form>
+              </Row> */}
           </Widget>
         ) : (
           ""
@@ -280,12 +333,19 @@ class ProductCategoryView extends Component {
                     <h5>Categories</h5>
                   </Col>
                   <Col sm={4}>
-                    <Button
-                      className="pull-right btn btn-success btn-sm"
-                      onClick={this.categoryForm}
-                    >
-                      <i className="fa fa-plus" /> Add
-                    </Button>
+                    {localStorage.getItem("role") === "Admin" ? (
+                      <Button
+                        className="pull-right btn btn-success btn-sm"
+                        onClick={this.categoryForm}
+                      >
+                        <i className="fa fa-plus" /> Add
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                    {/* <Button className="pull-right btn btn-success btn-sm" onClick={this.categoryForm}>
+                                                <i className="fa fa-plus" /> Add
+                                            </Button> */}
                   </Col>
                 </Row>
               }
@@ -298,7 +358,6 @@ class ProductCategoryView extends Component {
                     <th className="hidden-sm-down">#</th>
                     <th>Code</th>
                     <th>Description</th>
-                    <th className="hidden-sm-down">Image</th>
                     <th />
                   </tr>
                 </thead>
@@ -308,7 +367,6 @@ class ProductCategoryView extends Component {
                       <td>{key + 1}</td>
                       <td>{item.categoryCode}</td>
                       <td>{item.categoryDescription}</td>
-                      <td>{item.imageUrl}</td>
                       <td>
                         <Link
                           to={`/app/category/${this.state.code}/${item.categoryCode}`}

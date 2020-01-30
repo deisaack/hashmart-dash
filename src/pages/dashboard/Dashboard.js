@@ -29,7 +29,7 @@ class Dashboard extends Component {
   static propTypes = {
     posts: PropTypes.any,
     isFetching: PropTypes.bool,
-    dispatch: PropTypes.func.isRequired,
+    dispatch: PropTypes.func,
   };
   /* eslint-enable */
 

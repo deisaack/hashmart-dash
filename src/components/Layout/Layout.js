@@ -21,6 +21,7 @@ import SubCategory from "../../pages/products/SubCategory";
 import Brand from "../../pages/products/Brand";
 import ProductList from "../../pages/products/ProductList";
 import ProductDetail from "../../pages/products/ProductDetail";
+import Tabbed from "../../pages/products/ProductDetailTab";
 
 class Layout extends React.Component {
   constructor(props) {
@@ -32,8 +33,8 @@ class Layout extends React.Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem("token") === null) {
-      window.location.href = "/#/login";
+    if (localStorage.getItem("authToken") === null) {
+      window.location.href = "/";
     }
   }
 
@@ -90,6 +91,11 @@ class Layout extends React.Component {
                 path="/app/product/:productCode"
                 exact
                 component={ProductDetail}
+              />
+              <Route
+                path="/app/product-tabbed/:productCode"
+                exact
+                component={Tabbed}
               />
               <Route
                 path="/app/business/:id"

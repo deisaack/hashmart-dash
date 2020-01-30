@@ -31,7 +31,7 @@ var Env = function() {};
 
   Env.refreshToken = function() {
     const data = {
-      token: localStorage.getItem("token")
+      token: localStorage.getItem("authToken")
     };
     fetch(Env.baseUrl + "/api/v1/hashmart/refresh-token", {
       method: "POST",
@@ -49,7 +49,7 @@ var Env = function() {};
       .then(function(response) {
         response.text().then(function(result) {
           localStorage.setItem("initialTime", Date.now());
-          localStorage.setItem("token", `${result}`);
+          localStorage.setItem("authToken", `${result}`);
         });
       })
       .catch(function(error) {

@@ -3,7 +3,7 @@ import config from "./config";
 import axios from "axios";
 axios.defaults.baseURL = config.baseUrl;
 axios.defaults.headers.common["Content-Type"] = "application/json";
-const token = localStorage.getItem("token");
+const token = localStorage.getItem("authToken");
 if (token) {
   axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 }
@@ -12,7 +12,7 @@ export class Services {
     this.that = that;
     this.BASE_URL = "https://hashmart.nyumbapap.com";
     this.AUTH = {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       "Access-Control-Allow-Origin": "*"
     };
     this.CONFIG = { headers: this.AUTH };
@@ -48,6 +48,33 @@ export class Services {
       .get(url, this.CONFIG)
       .then(resp => {
         this.that.setState({ productList: resp.data, isLoading: false });
+      })
+      .catch(err => {
+        this.__handleCatch(err);
+      });
+  };
+
+  getBusinessProducts = companycode => {
+    const url = `${this.BASE_URL}/api/v1/hashmart/get-product-by-business/${companycode}`;
+    return axios
+      .get(url, this.CONFIG)
+      .then(resp => {
+        this.that.setState({ productList: resp.data, isLoading: false });
+      })
+      .catch(err => {
+        this.__handleCatch(err);
+      });
+  };
+
+  getProductChangeInStock = productcode => {
+    const url = `${this.BASE_URL}/api/v1/hashmart/get-changes-in-product-stock/${productcode}`;
+    axios
+      .get(url, this.CONFIG)
+      .then(resp => {
+        this.that.setState({
+          changesInProductStock: resp.data,
+          isLoading: false
+        });
       })
       .catch(err => {
         this.__handleCatch(err);
@@ -100,12 +127,21 @@ export class Services {
       });
   };
 
-  getMyBusinesses = () => {
+  getMyBusinesses = token => {
     const url = this.BASE_URL + "/api/v1/hashmart/get-my-business";
-    return axios
+    this.AUTH = {
+      Authorization: `Bearer ${token}`,
+      "Access-Control-Allow-Origin": "*"
+    };
+    this.CONFIG = { headers: this.AUTH };
+    axios
       .get(url, this.CONFIG)
       .then(resp => {
-        this.that.setState({ businessList: resp.data, isLoading: false });
+        this.that.setState({
+          businessList: resp.data,
+          isLoading: false,
+          display: ""
+        });
       })
       .catch(err => {
         this.__handleCatch(err);
@@ -132,6 +168,10 @@ export class Services {
     this.__completeSubmission(url, data);
   };
 
+  increaseProductStock = data => {
+    const url = this.BASE_URL + "/api/v1/hashmart/increase-product-stock";
+    this.__completeSubmission(url, data);
+  };
   createBrand = data => {
     const url = this.BASE_URL + "/api/v1/hashmart/create-brand";
     this.__completeSubmission(url, data);
@@ -147,55 +187,12 @@ export class Services {
     this.__completeSubmission(url, data);
   };
 
-  updateBusiness = data => {
-    const url = this.BASE_URL + "/api/v1/hashmart/create-business";
-    return axios
-      .post(url, data)
-      .then(resp => {
-        this.that.setState({ isLoading: false });
-      })
-      .catch(err => {
-        this.__handleCatch(err);
-      });
-  };
-
   getSingleBusiness = code => {
     const url = this.BASE_URL + `/api/v1/hashmart/get-single-business/${code}`;
     return axios
-      .get(url)
+      .get(url, this.CONFIG)
       .then(resp => {
         this.that.setState({ business: resp.data[0], isLoading: false });
-      })
-      .catch(err => {
-        this.__handleCatch(err);
-      });
-  };
-
-  getSingleCategory = (productCategory, categoryCode) => {
-    const url =
-      this.BASE_URL +
-      `/api/v1/hashmart/get-product-category/${productCategory}`;
-    axios
-      .get(url)
-      .then(resp => {
-        let productCategory = resp.data[0];
-        let categoryList = productCategory.category;
-        let category = {};
-        let subCategory = [];
-        categoryList.map((item, key) => {
-          if (item.categoryCode === categoryCode) {
-            category = item;
-            subCategory = item.subCategory;
-          }
-        });
-        this.that.setState({
-          productCategory: resp.data[0],
-          isLoading: false,
-          categoryList: resp.data[0].category,
-          category: category,
-          subCategory: subCategory
-        });
-        console.log("A", productCategory, categoryList, category, subCategory);
       })
       .catch(err => {
         this.__handleCatch(err);
@@ -212,7 +209,7 @@ export class Services {
       this.BASE_URL +
       `/api/v1/hashmart/get-product-category/${productCategory}`;
     axios
-      .get(url)
+      .get(url, this.CONFIG)
       .then(resp => {
         let productCategory = resp.data[0];
         let categoryList = productCategory.category;
@@ -259,6 +256,30 @@ export class Services {
       .catch(err => {
         this.__handleCatch(err);
       });
+  };
+
+  refreshToken = data => {
+    return;
+    let _this = this;
+    let now = new Date();
+    let expiry = new Date(localStorage.getItem("expiry"));
+    console.log("Now", now, expiry);
+    if (now > expiry) {
+      const url = this.BASE_URL + "/api/v1/hashmart/refresh-token";
+      return axios
+        .post(url, data)
+        .then(resp => {
+          localStorage.setItem("authToken", resp.data.authToken);
+          localStorage.setItem(
+            "expiry",
+            now.setMinutes(now.getMinutes() + 1).toString()
+          );
+          console.log("refreshed");
+        })
+        .catch(err => {
+          _this.__handleCatch(err);
+        });
+    }
   };
 
   __handleCatch(error) {
@@ -338,5 +359,31 @@ export class Services {
     let formData = new FormData();
     formData.append("file", document.getElementById(formId)[name].files[0]);
     return formData;
+  };
+
+  searchUser = term => {
+    if (term.trim() !== "")
+      axios
+        .get(`/api/v1/hashmart/search-user/${term}`, this.CONFIG)
+        .then(response => {
+          let users = [];
+          response.data.forEach(user =>
+            users.push({
+              label: user.name,
+              value: user.userCode,
+              phoneNumber: user.phoneNumber,
+              normalizedEmail: user.normalizedEmail,
+              profilePicture: user.profilePicture
+            })
+          );
+          this.that.setState({ users });
+        });
+  };
+
+  getUsers = () => {
+    axios.get(`/api/v1/hashmart/get-all-users`, this.CONFIG).then(response => {
+      this.that.setState({ users: response.data });
+      console.log(response.data);
+    });
   };
 }

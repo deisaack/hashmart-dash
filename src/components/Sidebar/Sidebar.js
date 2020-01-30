@@ -1,11 +1,11 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import {withRouter, Link} from 'react-router-dom';
+import React from "react";
+import { connect } from "react-redux";
+import { withRouter, Link } from "react-router-dom";
 
-import Icon from '../Icon';
-import LinksGroup from './LinksGroup/LinksGroup';
+import Icon from "../Icon";
+import LinksGroup from "./LinksGroup/LinksGroup";
 
-import s from './Sidebar.module.scss';
+import s from "./Sidebar.module.scss";
 
 const Sidebar = () => (
   <nav className={s.root}>
@@ -15,26 +15,27 @@ const Sidebar = () => (
       </Link>
     </header>
     <ul className={s.nav}>
+      <LinksGroup header="Dashboard" headerLink="/app/main" glyph="dashboard" />
+      {localStorage.getItem("role") === "Admin" ? (
+        <LinksGroup
+          header="Business"
+          headerLink="/app/business"
+          glyph="typography"
+        />
+      ) : (
+        ""
+      )}
+
       <LinksGroup
-        header="Dashboard"
-        headerLink="/app/main"
-        glyph="dashboard"
+        header="Product Categories"
+        headerLink="/app/product-category"
+        glyph="typography"
       />
-        <LinksGroup
-            header="Business"
-            headerLink="/app/business"
-            glyph="typography"
-        />
-        <LinksGroup
-            header="Product Categories"
-            headerLink="/app/product-category"
-            glyph="typography"
-        />
-        <LinksGroup
-            header="Products"
-            headerLink="/app/products"
-            glyph="typography"
-        />
+      <LinksGroup
+        header="Products"
+        headerLink="/app/products"
+        glyph="typography"
+      />
     </ul>
   </nav>
 );
