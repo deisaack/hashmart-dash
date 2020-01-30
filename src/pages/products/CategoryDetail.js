@@ -1,64 +1,75 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
-    Row,
-    Breadcrumb,
-    BreadcrumbItem, Col, Table, Button, Form, FormGroup, Label, Input,
-} from 'reactstrap';
-import {Services} from "../../Services";
-import {Functions} from "../../Functions";
+  Row,
+  Breadcrumb,
+  BreadcrumbItem,
+  Col,
+  Table,
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input
+} from "reactstrap";
+import { Services } from "../../Services";
+import { Functions } from "../../Functions";
 import Widget from "../../components/Widget";
 import cx from "classnames";
 import s from "../dashboard/Dashboard.module.scss";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 class CategoryDetail extends Component {
-
-    constructor(props) {
-        super(props);
-        this.services = new Services(this);
-        this.funcs = new Functions(this);
-        this.state = {
-            business: {},
-            category: {},
-            form: "",
-            subCategoryList: [],
-            subCategories: [],
-            productCategory: {}
-        }
-    }
-
-    componentDidMount() {
-        this.services.getProductItem(this.getProductCategory(), this.getCode())
-    }
-
-    getCode = function() {
-        const { match: { params } } = this.props;
-        this.setState({code: params.id});
-        return params.id
+  constructor(props) {
+    super(props);
+    this.services = new Services(this);
+    this.funcs = new Functions(this);
+    this.state = {
+      business: {},
+      category: {},
+      form: "",
+      subCategoryList: [],
+      subCategories: [],
+      productCategory: {}
     };
+  }
 
-    getProductCategory = function() {
-        const { match: { params } } = this.props;
-        this.setState({productCategory: params.productCategory});
-        return params.productCategory
+  componentDidMount() {
+    this.services.getProductItem(this.getProductCategory(), this.getCode());
+  }
+
+  getCode = function() {
+    const {
+      match: { params }
+    } = this.props;
+    this.setState({ code: params.id });
+    return params.id;
+  };
+
+  getProductCategory = function() {
+    const {
+      match: { params }
+    } = this.props;
+    this.setState({ productCategory: params.productCategory });
+    return params.productCategory;
+  };
+
+  subCategoryForm = () => {
+    this.setState({ form: "subCategory" });
+  };
+
+  submitForm = () => {
+    let data = {
+      categoryCode: this.state.code,
+      categoryDescription: this.state.categoryDescription,
+      imageUrl: this.state.imageUrl,
+      productCategoryCode: this.state.productCategory.productCategoryCode
     };
+    this.services.createSubCategory(data);
+  };
 
-    subCategoryForm = () => {
-        this.setState({form: "subCategory"})
-    };
-
-    submitForm = () => {
-        let data = {
-            "categoryCode": this.state.code,
-            "categoryDescription": this.state.categoryDescription,
-            "imageUrl": this.state.imageUrl,
-            "productCategoryCode": this.state.productCategory.productCategoryCode
-        };
-        this.services.createSubCategory(data)
-    };
-
-
-
+  imageUploadForm = () => {
+    console.log("UPLOADING IMAGE");
+  };
 
     render() {
         return (

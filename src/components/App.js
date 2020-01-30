@@ -11,6 +11,7 @@ import LayoutComponent from '../components/Layout';
 //import DocumentationLayoutComponent from '../documentation/DocumentationLayout';
 import Login from '../pages/login';
 import Register from '../pages/register';
+import NotFound from "../pages/notFound";
 
 const PrivateRoute = ({dispatch, component, ...rest }) => {
     let from = new Date(localStorage.getItem("created"));
@@ -57,8 +58,9 @@ class App extends React.PureComponent {
                     {/*       render={() => <Redirect to="/documentation/getting-started/overview"/>}/>*/}
                     {/* <Route path="/documentation" component={DocumentationLayoutComponent}/> */}
                     <Route path="/register" exact component={Register}/>
-                    <Route path="/login" exact component={Login}/>
+                    <Route path="/" exact component={Login}/>
                     <Route path="/error" exact component={ErrorPage}/>
+                    <Route component={NotFound} />
                 </Switch>
             </HashRouter>
         </div>

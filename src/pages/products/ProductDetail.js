@@ -11,6 +11,12 @@ import Widget from '../../components/Widget';
 import s from '../../styles/Static.module.scss';
 import {Services} from "../../Services";
 import {Functions} from "../../Functions";
+import Card from "reactstrap/es/Card";
+import CardImg from "reactstrap/es/CardImg";
+import CardBody from "reactstrap/es/CardBody";
+import CardTitle from "reactstrap/es/CardTitle";
+import CardSubtitle from "reactstrap/es/CardSubtitle";
+import CardText from "reactstrap/es/CardText";
 
 
 class ProductDetail extends Component {
@@ -68,37 +74,48 @@ class ProductDetail extends Component {
                 {this.state.alert}
                 <Breadcrumb>
                     <BreadcrumbItem>YOU ARE HERE</BreadcrumbItem>
-                    <BreadcrumbItem>Products</BreadcrumbItem>
+                    <BreadcrumbItem>Product</BreadcrumbItem>
                     <BreadcrumbItem active>{this.state.productCode}</BreadcrumbItem>
                 </Breadcrumb>
-                <h1 className="page-title mb-lg"><span className="fw-semi-bold">Products</span></h1>
+                <h1 className="page-title mb-lg"><span className="fw-semi-bold">Product</span></h1>
                 <Row>
                     <Col sm={12}>
                         <Widget
                              settings close
                         >
-                            <Table bordered={true} className={s.mainTable}>
+                            <Table className="table-responsive" bordered={true} className={s.mainTable}>
                                 <thead>
-                                <tr>
-                                    <th>Code</th>
-                                    <th>Name</th>
-                                    <th className="hidden-sm-down">Description</th>
-                                    <th className="hidden-sm-down">Available Quantity</th>
-                                    <th className="hidden-sm-down">Price</th>
-                                    <th className="hidden-sm-down">Discount</th>
-                                    <th className="hidden-sm-down">Actual Amount</th>
-                                </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td>Product Code</td>
                                         <td>{this.state.product.productCode}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>product Name</td>
                                         <td>{this.state.product.productName}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Description</td>
                                         <td>{this.state.product.description}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Available Quantity</td>
                                         <td>{this.state.product.availableQuantity}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Price</td>
                                         <td>Ksh {this.state.product.price}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Discount</td>
                                         <td>{this.state.product.discount}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Actual Amount</td>
                                         <td>{this.state.product.actuaLAmount}</td>
                                     </tr>
+
                                 </tbody>
                             </Table>
                         </Widget>
@@ -106,81 +123,6 @@ class ProductDetail extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col sm={12} md={6}>
-                        <Widget
-                            title={
-                                <Row style={{marginBottom: "5px"}}>
-                                    <Col sm={8}>
-                                        <h5>Product Files</h5>
-                                    </Col>
-                                    <Col sm={4}>
-                                        <Button className="pull-right btn btn-success btn-sm" onClick={()=>this.funcs.showForm("productFiles")}>
-                                            <i className="fa fa-plus" /> Add
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            } settings close
-                        >
-                            {this.state.form === "productFiles" ? (
-
-                                <Form>
-                                    <Row form>
-                                        <Col md={6}>
-                                            <FormGroup>
-                                                <Label for="categoryDescription">Description</Label>
-                                                <Input
-                                                    onFocus={this.funcs.handleFocus}
-                                                    onBlur={this.funcs.handleBlur}
-                                                    onChange={this.funcs.handleChange}
-                                                    type="text" name="categoryDescription" id="categoryDescription"
-                                                    placeholder="" />
-                                            </FormGroup>
-                                        </Col>
-                                        <Col md={6}>
-                                            <FormGroup>
-                                                <Label for="imageUrl">Image URL</Label>
-                                                <Input
-                                                    onFocus={this.funcs.handleFocus}
-                                                    onBlur={this.funcs.handleBlur}
-                                                    onChange={this.funcs.handleChange}
-                                                    // value={this.state.legalOrTradingName}
-                                                    type="text" name="imageUrl" id="imageUrl"
-                                                    placeholder="" />
-                                            </FormGroup>
-                                        </Col>
-                                    </Row>
-                                    <Row form>
-                                        <Col md={8} className="" />
-                                        <Col md={4} className="pull-right">
-                                            <Button className="pull-right btn-info btn-sm" onClick={this.funcs.handleClickSubmit}>Submit</Button>
-                                        </Col>
-                                    </Row>
-                                </Form>
-                            ): ""}
-                            <Table borderless className={s.mainTable}>
-                                <thead>
-                                <tr>
-                                    <th className="hidden-sm-down">#</th>
-                                    <th>Code</th>
-                                    <th>Description</th>
-                                    <th className="hidden-sm-down">Image</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {
-                                    this.state.productFiles.map((item, key) =>
-                                        <tr key={key}>
-                                            <td>{key+1}</td>
-                                            <td>{item.subCategoryCode}</td>
-                                            <td>{item.subCategoryDescription}</td>
-                                            <td>{item.imageUrl}</td>
-                                        </tr>
-                                    )
-                                }
-                                </tbody>
-                            </Table>
-                        </Widget>
-                    </Col>
                     <Col sm={12} md={6}>
                         <Widget
                             title={
@@ -235,7 +177,7 @@ class ProductDetail extends Component {
                                 <thead>
                                 <tr>
                                     <th className="hidden-sm-down">#</th>
-                                    <th>Code</th>
+                                    {/*<th>Code</th>*/}
                                     <th>Description</th>
                                     <th className="hidden-sm-down">Name</th>
                                     <th />
@@ -246,9 +188,84 @@ class ProductDetail extends Component {
                                     this.state.features.map((item, key) =>
                                         <tr key={key}>
                                             <td>{key+1}</td>
-                                            <td>{item.featureCode}</td>
+                                            {/*<td>{item.featureCode}</td>*/}
                                             <td>{item.description}</td>
                                             <td>{item.name}</td>
+                                        </tr>
+                                    )
+                                }
+                                </tbody>
+                            </Table>
+                        </Widget>
+                    </Col>
+
+                    <Col sm={12} md={6}>
+                        <Widget
+                            title={
+                                <Row style={{marginBottom: "5px"}}>
+                                    <Col sm={8}>
+                                        <h5>Product Files</h5>
+                                    </Col>
+                                    <Col sm={4}>
+                                        <Button className="pull-right btn btn-success btn-sm" onClick={()=>this.funcs.showForm("productFiles")}>
+                                            <i className="fa fa-plus" /> Add
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            } settings close
+                        >
+                            {this.state.form === "productFiles" ? (
+                                <Form>
+                                    <Row form>
+                                        <Col md={6}>
+                                            <FormGroup>
+                                                <Label for="categoryDescription">Description</Label>
+                                                <Input
+                                                    onFocus={this.funcs.handleFocus}
+                                                    onBlur={this.funcs.handleBlur}
+                                                    onChange={this.funcs.handleChange}
+                                                    type="text" name="categoryDescription" id="categoryDescription"
+                                                    placeholder="" />
+                                            </FormGroup>
+                                        </Col>
+                                        <Col md={6}>
+                                            <FormGroup>
+                                                <Label for="imageUrl">Image URL</Label>
+                                                <Input
+                                                    onFocus={this.funcs.handleFocus}
+                                                    onBlur={this.funcs.handleBlur}
+                                                    onChange={this.funcs.handleChange}
+                                                    // value={this.state.legalOrTradingName}
+                                                    type="text" name="imageUrl" id="imageUrl"
+                                                    placeholder="" />
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+                                    <Row form>
+                                        <Col md={8} className="" />
+                                        <Col md={4} className="pull-right">
+                                            <Button className="pull-right btn-info btn-sm" onClick={this.funcs.handleClickSubmit}>Submit</Button>
+                                        </Col>
+                                    </Row>
+                                </Form>
+                            ): ""}
+                            <Table borderless className={s.mainTable}>
+                                <thead>
+                                <tr>
+                                    <th className="hidden-sm-down">#</th>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                    <th className="hidden-sm-down">Image</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {
+                                    this.state.productFiles.map((item, key) =>
+                                        <tr key={key}>
+                                            <td>{key+1}</td>
+                                            <td>{item.subCategoryCode}</td>
+                                            <td>{item.subCategoryDescription}</td>
+                                            <td>{item.imageUrl}</td>
                                         </tr>
                                     )
                                 }

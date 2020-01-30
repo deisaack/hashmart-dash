@@ -17,7 +17,13 @@ import s from '../../styles/Static.module.scss';
 import {Link} from "react-router-dom";
 import {Services} from "../../Services";
 import {Functions} from "../../Functions";
+import Select from "react-select";
 
+const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' }
+]
 
 class BusinessList extends Component {
 
@@ -70,7 +76,8 @@ class BusinessList extends Component {
     };
 
     componentDidMount() {
-        this.services.getAllBusinesses();
+        // this.services.getAllBusinesses();
+        this.services.getMyBusinesses();
     }
 
     render() {
@@ -125,6 +132,7 @@ class BusinessList extends Component {
                                                 // value={this.state.companyCode}
                                                 type="text" name="companyCode" id="companyCode"
                                                 placeholder="" />
+                                            <Select options={options} />
                                         </FormGroup>
                                     </Col>
                                     <Col md={6}>
@@ -325,7 +333,6 @@ class BusinessList extends Component {
                                     </Table>
                                 </Widget>
                                 </Col>
-                            }
                 </Row>
             </div>
         );

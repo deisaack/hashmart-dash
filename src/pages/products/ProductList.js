@@ -28,6 +28,7 @@ class ProductList extends Component {
 
     componentDidMount() {
         this.services.getAllProducts();
+        // this.services.getBusinessProducts("BS00000012")
     }
 
     render() {
@@ -64,7 +65,6 @@ class ProductList extends Component {
                                     <th className="hidden-sm-down">#</th>
                                     <th>Code</th>
                                     <th>Name</th>
-                                    <th className="hidden-sm-down">Description</th>
                                     <th className="hidden-sm-down">Available Quantity</th>
                                     <th className="hidden-sm-down">Price</th>
                                     <th className="hidden-sm-down">Discount</th>
@@ -79,7 +79,6 @@ class ProductList extends Component {
                                             <td>{key+1}</td>
                                             <td>{item.productCode}</td>
                                             <td>{item.productName}</td>
-                                            <td>{item.description}</td>
                                             <td>{item.availableQuantity}</td>
                                             <td>Ksh {item.price}</td>
                                             <td>{item.discount}</td>

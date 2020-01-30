@@ -96,7 +96,7 @@ class Brand extends Component {
                     <BreadcrumbItem active>{this.state.brand.brandCode}</BreadcrumbItem>
                 </Breadcrumb>
                 <h1 className="page-title mb-lg"><span className="fw-semi-bold">{this.state.brand.brandName}</span></h1>
-                {this.state.form === "productForm" ? (
+                {this.state.form === "product" ? (
                     <Widget
                         title={<h5>
                             Create A Product
@@ -130,12 +130,12 @@ class Brand extends Component {
                             <Row form>
                                 <Col md={6}>
                                     <FormGroup>
-                                        <Label for="description">Description</Label>
+                                        <Label for="actuaLAmount">Actual Amount</Label>
                                         <Input
                                             onFocus={this.funcs.handleFocus}
                                             onBlur={this.funcs.handleBlur}
                                             onChange={this.funcs.handleChange}
-                                            type="text" name="description" id="description"
+                                            type="number" name="actuaLAmount" id="actuaLAmount"
                                             placeholder="" />
                                     </FormGroup>
                                 </Col>
@@ -176,14 +176,15 @@ class Brand extends Component {
                                 </Col>
                             </Row>
                             <Row form>
-                                <Col md={6}>
+
+                                <Col md={12}>
                                     <FormGroup>
-                                        <Label for="actuaLAmount">Actual Amount</Label>
+                                        <Label for="description">Description</Label>
                                         <Input
                                             onFocus={this.funcs.handleFocus}
                                             onBlur={this.funcs.handleBlur}
                                             onChange={this.funcs.handleChange}
-                                            type="number" name="actuaLAmount" id="actuaLAmount"
+                                            type="textarea" name="description" id="description"
                                             placeholder="" />
                                     </FormGroup>
                                 </Col>
@@ -199,20 +200,20 @@ class Brand extends Component {
                 ): ""}
 
                 <Row>
-                    <Col sm={12} md={6}>
+                    <Col sm={12} md={12}>
                         <Widget
                             title={
-                                <div>
-                                    <Col sm={9}>
-                                        <h5>Sub Category Detail</h5>
+                                <Row style={{marginBottom: "5px"}}>
+                                    <Col sm={8}>
+                                        {/*<h5>Brands</h5>*/}
                                     </Col>
-                                    <Col sm={3}>
-                                        {/*<Button className=" btn btn-indigo btn-sm" onClick={this.showMyBusinesses}>*/}
-                                        {/*    <i className="fa fa-institution" /> My Businesses*/}
-                                        {/*</Button>*/}
+                                    <Col sm={4}>
+                                        <Button className="pull-right btn btn-success btn-sm" onClick={()=>this.funcs.showForm("product")}>
+                                            <i className="fa fa-plus" /> Add
+                                        </Button>
                                     </Col>
-                                </div>
-                            }
+                                </Row>
+                            } settings close
                         >
                             <Table responsive striped className={cx('mb-0', s.usersTable)}>
                                 <thead>
@@ -223,56 +224,13 @@ class Brand extends Component {
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>Sub Category Code</td>
-                                    <td>{this.state.subCategory.subCategoryCode}</td>
-                                </tr>
-                                <tr>
-                                    <td>Description</td>
-                                    <td>{this.state.subCategory.subCategoryDescription}</td>
+                                    <td>Brand Code</td>
+                                    <td>{this.state.brand.brandCode}</td>
                                 </tr>
                                 <tr>
                                     <td>Image</td>
-                                    <td>{this.state.subCategory.imageUrl}</td>
+                                    <td>{this.state.brand.brandName}</td>
                                 </tr>
-                                </tbody>
-                            </Table>
-                        </Widget>
-                    </Col>
-                    <Col sm={12} md={6}>
-                        <Widget
-                            title={
-                                <Row style={{marginBottom: "5px"}}>
-                                    <Col sm={8}>
-                                        <h5>Products</h5>
-                                    </Col>
-                                    <Col sm={4}>
-                                        <Button className="pull-right btn btn-success btn-sm" onClick={this.productForm}>
-                                            <i className="fa fa-plus" /> Add
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            } settings close
-                        >
-                            <Table borderless className={s.mainTable}>
-                                <thead>
-                                <tr>
-                                    <th className="hidden-sm-down">#</th>
-                                    <th>Code</th>
-                                    <th>Brand Name</th>
-                                    <th />
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {
-                                    this.state.brandsList.map((item, key) =>
-                                        <tr key={key}>
-                                            <td>{key+1}</td>
-                                            <td>{item.brandCode}</td>
-                                            <td>{item.brandName}</td>
-                                            <td><Link to={`/app/product/${this.state.productCategory.productCategoryCode}/${this.state.category.categoryCode}/${this.state.subCategory.subCategoryCode}/${this.state.brand.brandCode}/${item.productCategoryCode}`}><i className="fa fa-eye" /></Link></td>
-                                        </tr>
-                                    )
-                                }
                                 </tbody>
                             </Table>
                         </Widget>

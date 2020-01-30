@@ -1,48 +1,57 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
-    Row,
-    Breadcrumb,
-    BreadcrumbItem, Col, Table, Button, Form, FormGroup, Label, Input,
-} from 'reactstrap';
-import {Services} from "../../Services";
-import {Functions} from "../../Functions";
+  Row,
+  Breadcrumb,
+  BreadcrumbItem,
+  Col,
+  Table,
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input
+} from "reactstrap";
+import { Services } from "../../Services";
+import { Functions } from "../../Functions";
 import Widget from "../../components/Widget";
 import cx from "classnames";
 import s from "../dashboard/Dashboard.module.scss";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 class ProductCategoryView extends Component {
-
-    constructor(props) {
-        super(props);
-        this.services = new Services(this);
-        this.funcs = new Functions(this);
-        this.state = {
-            business: {},
-            productCategory: {},
-            categoryList: [],
-            form: ""
-        }
-    }
-
-    componentDidMount() {
-        let code = this.getCode();
-        this.services.getProductItem(code);
-    }
-
-    getCode = function() {
-        const { match: { params } } = this.props;
-        this.setState({code: params.id});
-        return params.id
+  constructor(props) {
+    super(props);
+    this.services = new Services(this);
+    this.funcs = new Functions(this);
+    this.state = {
+      business: {},
+      productCategory: {},
+      categoryList: [],
+      form: ""
     };
+  }
 
-    categoryForm = () => {
-        this.setState({form: "category"})
-    };
+  componentDidMount() {
+    let code = this.getCode();
+    this.services.getProductItem(code);
+  }
 
-    imageUploadForm = () => {
-        this.setState({form: "imageUpload"})
-    };
+  getCode = function() {
+    const {
+      match: { params }
+    } = this.props;
+    this.setState({ code: params.id });
+    return params.id;
+  };
+
+  categoryForm = () => {
+    this.setState({ form: "category" });
+  };
+
+  imageUploadForm = () => {
+    console.log("IMAGE IIIPPLOOAD");
+    this.setState({ form: "imageUpload" });
+  };
 
     submitForm = () => {
         let data = {
@@ -53,114 +62,169 @@ class ProductCategoryView extends Component {
         this.services.createCategory(data)
     };
 
+  handleFileUpload = event => {
+    event.preventDefault();
+    let data = this.services.handleFileUpload(
+      "productCategoryImageForm",
+      "productCategoryImage"
+    );
 
+    this.services.__completeSubmission(
+      `/api/v1/hashmart/upload-category-image?productcategorycode=${this.state.productCategory.productCategoryCode}&categorycode=${this.state.productCategory.category[0].categoryCode}`,
+      data
+    );
+  };
 
+  render() {
+    return (
+      <div className={s.root}>
+        {this.state.alert}
 
-    render() {
-        return (
-            <div className={s.root}>
-                {this.state.alert}
+        <Breadcrumb>
+          <BreadcrumbItem>YOU ARE HERE</BreadcrumbItem>
+          <BreadcrumbItem>Product Categories</BreadcrumbItem>
+          <BreadcrumbItem active>
+            {this.state.productCategory.productCategoryCode}
+          </BreadcrumbItem>
+        </Breadcrumb>
+        <h1 className="page-title mb-lg">
+          <span className="fw-semi-bold">
+            {this.state.productCategory.productCategoryDescription}
+          </span>
+        </h1>
+        <Widget>
+          <Row>
+            <Col sm={2}></Col>
+            <Col sm={2}>
+              <Button
+                className="pull-right btn btn-success btn-sm"
+                onClick={this.imageUploadForm}
+              >
+                <i className="fa fa-cloud-upload" /> Upload Image
+              </Button>
+            </Col>
+          </Row>
+        </Widget>
+        {this.state.form === "category" ? (
+          <Widget title={<h5>Create Category</h5>} settings close>
+            <Form>
+              <Row form>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="categoryDescription">Description</Label>
+                    <Input
+                      onFocus={this.funcs.handleFocus}
+                      onBlur={this.funcs.handleBlur}
+                      onChange={this.funcs.handleChange}
+                      type="text"
+                      name="categoryDescription"
+                      id="categoryDescription"
+                      placeholder=""
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="imageUrl">Image URL</Label>
+                    <Input
+                      onFocus={this.funcs.handleFocus}
+                      onBlur={this.funcs.handleBlur}
+                      onChange={this.funcs.handleChange}
+                      // value={this.state.legalOrTradingName}
+                      type="text"
+                      name="imageUrl"
+                      id="imageUrl"
+                      placeholder=""
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row form>
+                <Col md={8} className="" />
+                <Col md={4} className="pull-right">
+                  <Button
+                    className="pull-right btn-info"
+                    onClick={this.funcs.handleClickSubmit}
+                  >
+                    Submit
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+          </Widget>
+        ) : (
+          ""
+        )}
 
-                <Breadcrumb>
-                    <BreadcrumbItem>YOU ARE HERE</BreadcrumbItem>
-                    <BreadcrumbItem>Product Categories</BreadcrumbItem>
-                    <BreadcrumbItem active>{this.state.productCategory.productCategoryCode}</BreadcrumbItem>
-                </Breadcrumb>
-                <h1 className="page-title mb-lg"><span className="fw-semi-bold">{this.state.productCategory.productCategoryDescription}</span></h1>
-                <Widget>
-                    <Row>
-                        <Col sm={2}>
-                        </Col>
-                        <Col sm={2}>
-                            <Button className="pull-right btn btn-success btn-sm" onClick={this.imageUploadForm}>
-                                <i className="fa fa-cloud-upload" /> Upload Image
-                            </Button>
-                        </Col>
-                    </Row>
-                </Widget>
-                {this.state.form === "category" ? (
-                    <Widget
-                        title={<h5>
-                            Create Category
-                        </h5>} settings close
-                    >
-                        <Form>
-                            <Row form>
-                                <Col md={12}>
-                                    <FormGroup>
-                                        <Label for="categoryDescription">Description</Label>
-                                        <Input
-                                            onFocus={this.funcs.handleFocus}
-                                            onBlur={this.funcs.handleBlur}
-                                            onChange={this.funcs.handleChange}
-                                            type="text" name="categoryDescription" id="categoryDescription"
-                                            placeholder="" />
-                                    </FormGroup>
-                                </Col>
-                                {/*<Col md={6}>*/}
-                                {/*    <FormGroup>*/}
-                                {/*        <Label for="imageUrl">Image URL</Label>*/}
-                                {/*        <Input*/}
-                                {/*            onFocus={this.funcs.handleFocus}*/}
-                                {/*            onBlur={this.funcs.handleBlur}*/}
-                                {/*            onChange={this.funcs.handleChange}*/}
-                                {/*            // value={this.state.legalOrTradingName}*/}
-                                {/*            type="text" name="imageUrl" id="imageUrl"*/}
-                                {/*            placeholder="" />*/}
-                                {/*    </FormGroup>*/}
-                                {/*</Col>*/}
-                            </Row>
-                            <Row form>
-                                <Col md={8} className="" />
-                                <Col md={4} className="pull-right">
-                                    <Button className="pull-right btn-info" onClick={this.funcs.handleClickSubmit}>Submit</Button>
-                                </Col>
-                            </Row>
-                        </Form>
-                    </Widget>
-                ): ""}
-
-                {this.state.form === "imageUpload" ? (
-                    <Widget
-                        title={<h5>
-                            Create Category
-                        </h5>} settings close
-                    >
-                        <Form>
-                            <Row form>
-                                <Col md={6}>
-                                    <FormGroup>
-                                        <Label for="categoryDescription">Description</Label>
-                                        <Input
-                                            onFocus={this.funcs.handleFocus}
-                                            onBlur={this.funcs.handleBlur}
-                                            onChange={this.funcs.handleChange}
-                                            type="text" name="categoryDescription" id="categoryDescription"
-                                            placeholder="" />
-                                    </FormGroup>
-                                </Col>
-                                <Col md={6}>
-                                    <FormGroup>
-                                        <Label for="imageUrl">Image URL</Label>
-                                        <Input
-                                            onFocus={this.funcs.handleFocus}
-                                            onBlur={this.funcs.handleBlur}
-                                            onChange={this.funcs.handleChange}
-                                            // value={this.state.legalOrTradingName}
-                                            type="text" name="imageUrl" id="imageUrl"
-                                            placeholder="" />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                            <Row form>
-                                <Col md={8} className="" />
-                                <Col md={4} className="pull-right">
-                                    <Button className="pull-right btn-info" onClick={this.funcs.handleClickSubmit}>Submit</Button>
-                                </Col>
-                            </Row>
-                        </Form>
-                    </Widget>
-                ): ""}
+        {this.state.form === "imageUpload" ? (
+          <Widget title={<h5>Create Category</h5>} settings close>
+            <form
+              onSubmit={this.handleFileUpload}
+              id="productCategoryImageForm"
+            >
+              <Row form>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="categoryDescription">Description</Label>
+                    <Input
+                      onFocus={this.funcs.handleFocus}
+                      onBlur={this.funcs.handleBlur}
+                      onChange={this.funcs.handleChange}
+                      type="text"
+                      name="categoryDescription"
+                      id="categoryDescription"
+                      placeholder=""
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="imageUrl">Image URL</Label>
+                    <Input
+                      onFocus={this.funcs.handleFocus}
+                      onBlur={this.funcs.handleBlur}
+                      onChange={this.funcs.handleChange}
+                      // value={this.state.legalOrTradingName}
+                      type="text"
+                      name="imageUrl"
+                      id="imageUrl"
+                      placeholder=""
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="productCategoryImage">Image</Label>
+                    <Input
+                      //   onFocus={this.funcs.handleFocus}
+                      //   onBlur={this.funcs.handleBlur}
+                      //   onChange={this.funcs.handleChange}
+                      // value={this.state.legalOrTradingName}
+                      type="file"
+                      name="productCategoryImage"
+                      id="productCategoryImage"
+                      placeholder=""
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row form>
+                <Col md={8} className="" />
+                <Col md={4} className="pull-right">
+                  <Button
+                    className="pull-right btn-info"
+                    type="submit"
+                    // onClick={this.funcs.handleClickSubmit}
+                  >
+                    Upload
+                  </Button>
+                </Col>
+              </Row>
+            </form>
+          </Widget>
+        ) : (
+          ""
+        )}
 
                 <Row>
                     <Col sm={12} md={6}>
