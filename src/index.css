@@ -1,0 +1,11 @@
+.nav-tabs .nav-link {
+  border: 1px solid transparent;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+.nav.nav-tabs .nav-item a.active {
+  background-color: #fffdfd;
+  border-color: #fffdfd;
+  color: #495057;
+}

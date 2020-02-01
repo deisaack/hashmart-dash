@@ -88,9 +88,9 @@ class Tabbed extends Component {
     }
   };
 
-  //   toggle = () => {
-  //     this.setState({ form: "" });
-  //   };
+  toggleForm = () => {
+    this.setState({ form: "" });
+  };
 
   handleFileUpload = event => {
     event.preventDefault();
@@ -108,6 +108,7 @@ class Tabbed extends Component {
   render() {
     return (
       <div>
+        {this.state.alert}
         <Nav tabs>
           <NavItem>
             <NavLink
@@ -250,7 +251,7 @@ class Tabbed extends Component {
                         {this.state.form === "productFiles" ? (
                           <Form>
                             <Row form>
-                              <Modal isOpen={true} toggle={this.toggle}>
+                              <Modal isOpen={true} toggle={this.toggleForm}>
                                 <ModalHeader
                                   cssModule={{
                                     "modal-title": "w-100 text-center"
@@ -293,7 +294,10 @@ class Tabbed extends Component {
                                   </form>
                                 </ModalBody>
                                 <ModalFooter>
-                                  <Button color="warning" onClick={this.toggle}>
+                                  <Button
+                                    color="warning"
+                                    onClick={this.toggleForm}
+                                  >
                                     Cancel
                                   </Button>{" "}
                                   <Button

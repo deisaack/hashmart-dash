@@ -54,12 +54,26 @@ export class Services {
       });
   };
 
+  //
+
   getBusinessProducts = companycode => {
     const url = `${this.BASE_URL}/api/v1/hashmart/get-product-by-business/${companycode}`;
     return axios
       .get(url, this.CONFIG)
       .then(resp => {
         this.that.setState({ productList: resp.data, isLoading: false });
+      })
+      .catch(err => {
+        this.__handleCatch(err);
+      });
+  };
+
+  getBusinessOrders = businessCode => {
+    const url = `${this.BASE_URL}/api/v1/hashmart/get-recent-business-orders/${businessCode}`;
+    return axios
+      .get(url, this.CONFIG)
+      .then(resp => {
+        this.that.setState({ ordes: resp.data, isLoading: false });
       })
       .catch(err => {
         this.__handleCatch(err);

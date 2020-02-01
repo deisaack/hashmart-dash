@@ -22,6 +22,7 @@ import Brand from "../../pages/products/Brand";
 import ProductList from "../../pages/products/ProductList";
 import ProductDetail from "../../pages/products/ProductDetail";
 import Tabbed from "../../pages/products/ProductDetailTab";
+import Carded from "../../pages/products/ProductDetailCarded";
 
 class Layout extends React.Component {
   constructor(props) {
@@ -90,8 +91,9 @@ class Layout extends React.Component {
               <Route
                 path="/app/product/:productCode"
                 exact
-                component={Tabbed}
+                component={Carded}
               />
+              <Route path="/app/prodct/:productCode" exact component={Tabbed} />
               <Route
                 path="/app/business/:id"
                 exact
